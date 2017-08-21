@@ -1,0 +1,9 @@
+.env
+.env*
+.serverless
+out.json
+test.json
+node_modules
+.idea
+yarn.lock
+.DS_Store
