@@ -1,0 +1,16 @@
+{
+  "name": "bulk-account-creation-example",
+  "version": "1.0.0",
+  "description": "Example script for multiple account creation",
+  "main": "bulkCreate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xabi Errotabehere",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.121.0",
+    "bluebird": "^3.5.0",
+    "request-promise": "^4.2.1"
+  }
+}
