@@ -43,7 +43,7 @@ All requests to Cloud Conformity's API must be authenticated.
 Add an Authorization header with the ‘APIKey’, and your 64-bit key:
 
 ###### Example:
-`APIKey r1WxLyo_-ZjLjkB3WtQ1u5XOwExfnxV2f0cCrHaPPoWZ8GgGUfdFZZ3LWkvcBL9i`
+`ApiKey r1WxLyo_-ZjLjkB3WtQ1u5XOwExfnxV2f0cCrHaPPoWZ8GgGUfdFZZ3LWkvcBL9i`
 
 
 ## Success And Errors
