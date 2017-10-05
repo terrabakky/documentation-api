@@ -1,7 +1,7 @@
 # Cloud Conformity API Keys API
 
 
-Below is a list of the available APIs: 
+Below is a list of the available APIs:
 
 - [Get The Current User](#get-the-current-user)
 
@@ -10,19 +10,19 @@ Below is a list of the available APIs:
 
 This endpoint get the current user.
 
-##### Endpoints: 
+##### Endpoints:
 
-`GET /whoami`
+`GET /users/whoami`
 
 ##### Parameters
 This end point takes no parameters.
 
-Example Request: 
+Example Request:
 
 ```
-curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/whoami
+curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/users/whoami
 ```
-Example Response: 
+Example Response:
 
 ```
 {
