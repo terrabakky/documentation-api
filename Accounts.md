@@ -2,13 +2,13 @@
 
 Below is a list of the available API calls:
 
-- [Add An Account](#add-an-account)
+- [Create An Account](#create-an-account)
 - [List All Accounts](#list-all-accounts)
-- [View Account Details](#view-account-details)
+- [Get Account Details](#get-account-details)
 - [Scan Account](#scan-account)
 
 
-## Add an Account
+## Create an Account
 This endpoint is used to register a new AWS account with Cloud Conformity.
 
 **IMPORTANT:**
@@ -191,7 +191,7 @@ Example Response:
 }
 ```
 
-## View Account Details
+## Get Account Details
 
 This endpoint allows you to get the details of the specified account.
 
