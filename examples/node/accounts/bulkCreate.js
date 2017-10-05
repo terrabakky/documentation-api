@@ -2,17 +2,19 @@ var request = require('request-promise');
 var Promise = require("bluebird");
 var AWS = require("aws-sdk");
 
+// IMPORTANT : Please contact us to acquire our AWS Account ID
+var cloudConformityAWSAccountId;
 var APIKey = "YOUR_API_KEY";
 var templateURL = "https://s3-us-west-2.amazonaws.com/cloudconformity/CloudConformity.template";
 
 var accounts = [{
 	accessKeyId: "AKIAI_MY_ACCESS_KEY",
-	secredAccessKey: "YOUR_SECRET",
+	secretAccessKey: "YOUR_SECRET",
 	name: "My account",
 	environment: "My environment"
 }, {
 	accessKeyId: "AKIAI_MY_ACCESS_KEY_FOR_ANOTHER_ACCOUNT",
-	secredAccessKey: "YOUR_SECRET_FOR_ANOTHER_ACCOUNT",
+	secretAccessKey: "YOUR_SECRET_FOR_ANOTHER_ACCOUNT",
 	name: "My other account",
 	environment: "My other environment"
 }];
@@ -40,7 +42,7 @@ Promise.mapSeries(accounts, function(account) {
 			TemplateURL: templateURL,
 			Parameters: [{
 				ParameterKey: 'AccountId',
-				ParameterValue: '717210094962'
+				ParameterValue: `${cloudConformityAWSAccountId}`
 			}, {
 				ParameterKey: 'ExternalId',
 				ParameterValue: externalId
@@ -49,7 +51,7 @@ Promise.mapSeries(accounts, function(account) {
 
 		var config = new AWS.Config({
 			accessKeyId: account.accessKeyId,
-			secretAccessKey: account.secredAccessKey,
+			secretAccessKey: account.secretAccessKey,
 			region: process.env.AWS_REGION
 		});
 
