@@ -364,14 +364,14 @@ Example Request:
 
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/accounts/BJ0Ox16Hb/settings/rules/RDS-018?notes=true
+https://us-west-2-api.cloudconformity.com/v1/accounts/H19NxMi5-/settings/rules/RDS-018?notes=true
 ```
 Example Response:
 ```
 {
 	"data": {
 		"type": "accounts",
-		"id": "BJ0Ox16Hb",
+		"id": "H19NxMi5-",
 		"attributes": {
 			"settings": {
 				"rules": [
@@ -397,7 +397,7 @@ Example Response:
 			"organisation": {
 				"data": {
 					"type": "organisations",
-					"id": "ryqMcJn4b"
+					"id": "B1nHYYpwx"
 				}
 			}
 		}
@@ -405,7 +405,7 @@ Example Response:
 	"meta": {
 		"notes": [
 			{
-				"createdBy": "S1mS0YcL-",
+				"createdBy": "SYmS0YcL-",
 				"createdDate": 1511456432526,
 				"note": "hello world"
 			}
@@ -466,11 +466,11 @@ curl -X PATCH \
 				],
 				"enabled": false
 			},
-			"note": "copied from account BJ0Ox16Hb via the api"
+			"note": "copied from account H19NxMi5- via the api"
 		}
 	}
 }' \
-https://us-west-2-api.cloudconformity.com/v1/accounts/ryl8J9Jv-/settings/rules/RDS-018
+https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb/settings/rules/RDS-018
 ```
 Example Response:
 
@@ -479,7 +479,7 @@ Example Response:
 {
 	"data": {
 		"type": "accounts",
-		"id": "ryl8J9Jv-",
+		"id": "AgA12vIwb",
 		"attributes": {
 			"settings": {
 				"rules": [
@@ -551,7 +551,7 @@ Example Response:
 			"organisation": {
 				"data": {
 					"type": "organisations",
-					"id": "ryqMcJn4b"
+					"id": "B1nHYYpwx"
 				}
 			}
 		}

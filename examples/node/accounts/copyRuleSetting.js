@@ -3,13 +3,14 @@ const request = require('request-promise');
 //Please substitute YOUR_ENDPOINT and YOUR_API_KEY
 let APIKey = "YOUR_API_KEY";
 let fromAccountId = "YOUR_ACCOUNT_ID"; // Id of account you want to copy a rule FROM
-let toAccountId = "YOUR_SECOND_ACCOUNT_ID";
+let toAccountId = "YOUR_SECOND_ACCOUNT_ID"; // Id of account you want to copy a rule TO
 let ruleId = "YOUR_RULE_ID"; // Id of rule which has configured settings on the origin account
+let wantsNotes = "YOUR_BOOLEAN" // Is true if you want to fetch notes attached to rule configuratiosn
 let note = "YOUR_NOTE"; // Note to add when patching a rule setting
 
 let options = {
 	method: 'GET',
-	uri: `https://us-west-2-api.cloudconformity.com/v1/accounts/${fromAccountId}/settings/rules/${ruleId}?notes=true`,
+	uri: `https://us-west-2-api.cloudconformity.com/v1/accounts/${fromAccountId}/settings/rules/${ruleId}?notes=${wantsNotes}`,
 	headers: {
 		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
