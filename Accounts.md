@@ -6,6 +6,8 @@ Below is a list of the available API calls:
 - [List All Accounts](#list-all-accounts)
 - [Get Account Details](#get-account-details)
 - [Scan Account](#scan-account)
+- [Get Rule Setting](#get-rule-setting)
+- [Update Rule Setting](#update-rule-setting)
 
 
 ## Create an Account
@@ -335,5 +337,224 @@ Example Response:
             "status": "STARTED"
         }
     ]
+}
+```
+
+## Get Rule Setting
+
+A GET request to this endpoint allows you to get configured rule setting for the specified rule Id of the specified account.
+If a specific rule has never been configured, the request will result in a 404 error.
+For example, even if our bots run rule RDS-018 for your account hourly, if you have never configured it, trying to get rule settings for RDS-018 will result in a 404 error.
+
+##### Endpoints:
+
+`GET /accounts/accountId/settings/rules/ruleId`
+
+##### Parameters
+- `accountId`: The ID of the account
+- `ruleId`: The ID of the rule
+- `notes`: Optional parameter (boolean) to get notes for the specified rule setting
+
+
+
+
+Example Request:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/accounts/H19NxMi5-/settings/rules/RDS-018?notes=true
+```
+Example Response:
+```
+{
+	"data": {
+		"type": "accounts",
+		"id": "H19NxMi5-",
+		"attributes": {
+			"settings": {
+				"rules": [
+					{
+						"ruleExists": false,
+						"riskLevel": "MEDIUM",
+						"id": "RDS-018",
+						"extraSettings": [
+							{
+								"name": "threshold",
+								"value": 90
+							}
+						],
+						"enabled": false
+					}
+				],
+				"access": {}
+			},
+			"available-runs": 5,
+			"access": null
+		},
+		"relationships": {
+			"organisation": {
+				"data": {
+					"type": "organisations",
+					"id": "B1nHYYpwx"
+				}
+			}
+		}
+	},
+	"meta": {
+		"notes": [
+			{
+				"createdBy": "SYmS0YcL-",
+				"createdDate": 1511456432526,
+				"note": "hello world"
+			}
+		]
+	}
+}
+```
+
+## Update rule setting
+
+A PATCH request to this endpoint allows you to customize rule setting for the specified rule Id of the specified account.
+This feature is used in conjunction with the GET request to the same endpoint for copying rule setting from one account to another. An example of this function is provided in the examples folder.
+
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;To copy rule setting from one account to another, you first need to:
+1. Obtain rule setting from the desired account. [Get rule setting](#get-rule-setting)
+1. Paste rule setting as is into the body of the PATCH request following the format below.
+
+##### Endpoints:
+
+`PATCH /accounts/accountId/settings/rules/ruleId`
+
+##### Parameters
+- `data`: an JSON object containing JSONAPI compliant data object with following properties
+  - `attributes`: An attribute object containing
+    - `ruleSetting`: An object containing
+      - `id`: Rule Id, same as the one provided in the endpoint
+      - `enabled`: Boolean, true for inclusion in bot detection, false for exclusion
+      - `riskLevel`: riskLevel you desire for this rule. Must be one of the following: LOW, MEDIUM, HIGH, VERY_HIGH, EXTREME
+      - `extraSettings`: An array of object(s) for customisable rules only, containing
+        - `name`: Keyword
+        - `type`: Rule specific property
+        - `countries/regions/multiple/etc....`: Rule specific property (boolean)
+        - `value`: Customisable value for rules that take on single name/value pairs
+        - `values`: An array (sometimes of objects) rules that take on a set of of values
+    - `notes`: A detailed message regarding the reason for this rule configuration
+
+Example Request:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+	"data": {
+		"attributes": {
+			"ruleSetting": {
+				"ruleExists": false,
+				"riskLevel": "MEDIUM",
+				"id": "RDS-018",
+				"extraSettings": [
+					{
+						"name": "threshold",
+						"value": 90
+					}
+				],
+				"enabled": false
+			},
+			"note": "copied from account H19NxMi5- via the api"
+		}
+	}
+}' \
+https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb/settings/rules/RDS-018
+```
+Example Response:
+
+```
+
+{
+	"data": {
+		"type": "accounts",
+		"id": "AgA12vIwb",
+		"attributes": {
+			"settings": {
+				"rules": [
+					{
+						"riskLevel": "VERY_HIGH",
+						"id": "CT-001",
+						"extraSettings": null,
+						"enabled": true
+					},
+					{
+						"riskLevel": "MEDIUM",
+						"id": "RTM-005",
+						"extraSettings": [
+							{
+								"name": "authorisedCountries",
+								"countries": true,
+								"type": "countries",
+								"value": null,
+								"values": [
+									{
+										"value": "CA",
+										"label": "Canada"
+									},
+									{
+										"value": "US",
+										"label": "United States"
+									}
+								]
+							}
+						],
+						"enabled": false
+					},
+					{
+						"ruleExists": false,
+						"riskLevel": "MEDIUM",
+						"id": "RTM-008",
+						"extraSettings": [
+							{
+								"name": "authorisedRegions",
+								"regions": true,
+								"type": "regions",
+								"value": null,
+								"values": ["eu-west-1", "eu-west-2"]
+							}
+						],
+						"enabled": false
+					},
+					{
+						"ruleExists": false,
+						"riskLevel": "MEDIUM",
+						"id": "RDS-018",
+						"extraSettings": [
+							{
+								"name": "threshold",
+								"value": 90,
+								"values": [],
+								"type": []
+							}
+						],
+						"enabled": false
+					}
+				],
+				"access": {}
+			},
+			"available-runs": 5,
+			"access": null
+		},
+		"relationships": {
+			"organisation": {
+				"data": {
+					"type": "organisations",
+					"id": "B1nHYYpwx"
+				}
+			}
+		}
+	}
 }
 ```
