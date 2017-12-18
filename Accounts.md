@@ -566,16 +566,22 @@ Example Response:
 ```
 
 
-##### Errors:
+#### Errors:
 
 Some errors thrown from rule setting validation may need further clarification. Below is a list.
 
-Code | Details | Resolution
---- | --- | ---
-`422` | This security (or cost) package rule `ruleId` is not part of the account subscription | You cannot configure rule settings for this rule. Try another rule.
-`422` | Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
-`422` | Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
-`422` | Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
+Error Details | Resolution
+--- | ---
+This security (or cost) package rule `ruleId` is not part of the account subscription | You cannot configure rule settings for this rule. Try another rule.
+Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
+Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
+Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
+One or more rule setting property is invalid for `ruleId` | remove the `ruleSetting` property if it is not `id`, `enabled`, `riskLevel`, `extraSettings`, or `ruleExists`
+-- | --
+Extra settings specific errors
+-- | --
+Rule `ruleId` is not configurable | remove `ruleSetting.extraSettings`, you may only change risk level or enable/disable this rule. If you are directly copying this rule from another account and getting this message, this rule may have been previously configurable and is no longer.
+
 
 
 
@@ -830,9 +836,17 @@ Example Response:
 
 Some errors thrown from rule setting validation may need further clarification. Below is a list.
 
-Code | Details | Resolution
---- | --- | ---
-`422` | This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
-`422` | This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
+Error Details | Resolution
+--- | ---
+This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
+Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
+Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
+Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
+One or more rule setting property is invalid for `ruleId` | remove the `ruleSetting` property if it is not `id`, `enabled`, `riskLevel`, `extraSettings`, or `ruleExists`
+-- | --
+Extra settings specific errors
+-- | --
+Rule `ruleId` is not configurable | remove `ruleSetting.extraSettings`, you may only change risk level or enable/disable this rule. If you are directly copying this rule from another account and getting this message, this rule may have been previously configurable and is no longer.
+
 
 
