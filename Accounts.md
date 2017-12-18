@@ -307,6 +307,7 @@ Example Response:
     ]
 }
 ```
+
 ## Scan Account
 
 This endpoint allows you to run conformity bot for the specified account.
@@ -415,6 +416,9 @@ Example Response:
 	}
 }
 ```
+
+
+
 
 ## Update rule setting
 
@@ -560,6 +564,22 @@ Example Response:
 	}
 }
 ```
+
+
+##### Errors:
+
+Some errors thrown from rule setting validation may need further clarification. Below is a list.
+
+Code | Details | Resolution
+--- | --- | ---
+`422` | This security (or cost) package rule `ruleId` is not part of the account subscription | You cannot configure rule settings for this rule. Try another rule.
+`422` | Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
+`422` | Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
+`422` | Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
+
+
+
+
 
 ## Get Rule Settings
 
@@ -805,4 +825,14 @@ Example Response:
 	}
 }
 ```
+
+##### Errors:
+
+Some errors thrown from rule setting validation may need further clarification. Below is a list.
+
+Code | Details | Resolution
+--- | --- | ---
+`422` | This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
+`422` | This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
+
 
