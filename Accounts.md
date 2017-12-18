@@ -832,7 +832,7 @@ Example Response:
 }
 ```
 
-##### Errors:
+#### Errors:
 
 Some errors thrown from rule setting validation may need further clarification. Below is a list.
 
@@ -843,9 +843,7 @@ Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required par
 Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
 Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
 One or more rule setting property is invalid for `ruleId` | remove the `ruleSetting` property if it is not `id`, `enabled`, `riskLevel`, `extraSettings`, or `ruleExists`
--- | --
-Extra settings specific errors
--- | --
+**Extra Settings**
 Rule `ruleId` is not configurable | remove `ruleSetting.extraSettings`, you may only change risk level or enable/disable this rule. If you are directly copying this rule from another account and getting this message, this rule may have been previously configurable and is no longer.
 
 
