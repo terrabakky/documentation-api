@@ -574,6 +574,8 @@ For more information about rule specifivities, consult [Cloud Conformity Region 
 Error Details | Resolution
 --- | ---
 This security (or cost) package rule `ruleId` is not part of the account subscription | You cannot configure rule settings for this rule. Try another rule.
+This security (or cost) package rule `ruleId` is not part of the account subscription | You cannot configure rule settings for this rule. Try another rule.
+`ruleId` is not configurable from this endpoint. | This is either a cost-setting or organisation-setting which you cannot configure via this account rule settings endpoint.
 Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
 Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
 Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
@@ -840,6 +842,7 @@ For more information about rule specifivities, consult [Cloud Conformity Region 
 Error Details | Resolution
 --- | ---
 This security (or cost) package rule `rule.id` is not part of the account subscription | Remove that rule setting from the array
+`ruleId` is not configurable from this endpoint. | This is either a cost-setting or organisation-setting which you cannot configure via this account rule settings endpoint.
 Rule risk level missing for `ruleId` | `ruleSetting.riskLevel` is a required parameter
 Rule risk level provided for `ruleId` is incorrect | only "LOW", "MEDIUM", "HIGH", "VERY_HIGH", and "EXTREME" are accepted risk levels
 Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a required boolean parameter
