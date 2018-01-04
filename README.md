@@ -64,6 +64,9 @@ Status Code:
 * `422 Unprocessable Entity`
 * `500 Internal Server Error`
 
+Note: 
+> When getting 401 and 403 errors, double check that you have the correct privileges. For example, if you have Read-Only access to an account, you can perform read calls such as pulling a list of existing checks from the `GET /checks` endpoint. However, you cannot perform write calls such as requesting a conformity bot run from the `POST /accounts/id/scan` endpoint.
+
 ## Pagination 
 There are two parameters to configure pagination: 
 
