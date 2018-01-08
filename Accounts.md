@@ -695,6 +695,7 @@ This feature is used in conjunction with the GET request to the same endpoint fo
 ##### Parameters
 - `data`: an JSON object containing JSONAPI compliant data object with following properties
   - `attributes`: An attribute object containing
+    - `note`: A detailed message regarding the reason for this batch of rule configurations
     - `ruleSettings`: An array of objects, each object contains
       - `id`: Rule Id, same as the one provided in the endpoint
       - `enabled`: Boolean, true for inclusion in bot detection, false for exclusion
@@ -705,7 +706,7 @@ This feature is used in conjunction with the GET request to the same endpoint fo
         - `countries/regions/multiple/etc....`: Rule specific property (boolean)
         - `value`: Customisable value for rules that take on single name/value pairs
         - `values`: An array (sometimes of objects) rules that take on a set of of values
-    - `note`: A detailed message regarding the reason for this batch of rule configurations
+
 
 Example Request:
 
