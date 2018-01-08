@@ -717,6 +717,7 @@ curl -X PATCH \
 {
 	"data": {
 		"attributes": {
+			"note": "copied from account H19NxMi5- via the api",
 			"ruleSettings": [
 				{
 					"ruleExists": false,
@@ -757,8 +758,7 @@ curl -X PATCH \
 					],
 					"enabled": false
 				}
-			],
-			"note": "copied from account H19NxMi5- via the api"
+			]
 		}
 	}
 }' \
