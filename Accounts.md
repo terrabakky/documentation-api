@@ -569,7 +569,7 @@ Example Response:
 #### Errors:
 
 Some errors thrown from rule setting validation may need further clarification. Below is a list.
-For more information about rule specifivities, consult [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
+For more information about rule specifivities, consult [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
 
 Error Details | Resolution
 --- | ---
@@ -836,8 +836,7 @@ Example Response:
 #### Errors:
 
 Some errors thrown from rule settings validation may need further clarification. Below is a list.
-For more information about rule specifivities, consult [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
-
+For more information about rule specifivities, consult [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
 
 Error Details | Resolution
 --- | ---
