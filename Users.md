@@ -6,7 +6,7 @@ Below is a list of the available APIs:
 - [Get The Current User](#get-the-current-user)
 
 ## User Privileges
-There are 4 possible CloudConformity roles. Each role grants different levels of access via the api. The roles are:
+There are 4 possible Cloud Conformity roles. Each role grants different levels of access via the api. The roles are:
 
 - __organisation admin__
 - __organisation user with full access to account__
