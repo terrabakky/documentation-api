@@ -17,18 +17,18 @@ User access to each endpoint is listed below:
 
 | Endpoint | admin | full access user| read-only user | no access user |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| GET /api-keys | Y | Y | Y | Y |
-| GET /api-keys/id | Y | Y | Y | Y |
-| POST /accounts (create a new account) | Y | N | N | N |
-| GET /accounts (get a list of accounts you have access to) | Y | Y | Y | Y |
+| GET /api-keys  (get a list of your api keys)| Y | Y | Y | Y |
+| GET /api-keys/id  (get details about an api key)| Y | Y | Y | Y |
+| POST /accounts  (create a new account) | Y | N | N | N |
+| GET /accounts  (get a list of accounts you have access to) | Y | Y | Y | Y |
 | GET /accounts/id | Y | Y | Y | N |
-| POST /accounts/id/scan (run the conformity bot) | Y | Y | N | N |
+| POST /accounts/id/scan  (run the conformity bot) | Y | Y | N | N |
 | GET /accounts/accountId/settings/rules/ruleId | Y | Y | Y | N |
 | PATCH /accounts/accountId/settings/rules/ruleId | Y | Y | N | N |
 | GET /accounts/accountId/settings/rules | Y | Y | Y | N |
 | PATCH /accounts/accountId/settings/rules | Y | Y | N | N |
-| GET /checks *| Y | Y | Y | N |
-| Create an External Id | Y | N | N | N |
+| GET /checks * | Y | Y | Y | N |
+| POST /external-ids | Y | N | N | N |
 | GET /users/whoami | Y | Y | Y | Y |
 
 * Response will depend on the AccountIds added to the query parameter. For example, if a user has no access to an account and they add that account to the AccountIds array, an error will be thrown.
