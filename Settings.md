@@ -157,7 +157,7 @@ This feature can be used in conjunction with a POST request to copy communicatio
 &nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
 
 | User ROLE  | Organisation-Level Settings | Account-Level Settings |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- |
 | ADMIN  | Full settings with configurations | Full settings with configurations |
 | user with FULL access to the account  | Settings without configurations | Full settings with configurations |
 | user with READONLY access to the account  |  No settings | Settings without configurations | 
