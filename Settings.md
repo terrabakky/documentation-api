@@ -55,9 +55,9 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
-| slack  |  ```{ \n "url" : "'https://hooks.slack.com/services/your-slack-webhook', `n "channel": "#your-channel"  \n }```  |
-| pager-duty  |    |
-| sns  |    |
+| slack  | `{ "url" : "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
+| pager-duty  |   `{ "serviceName" : "yourServiceName", "serviceKey": "yourServiceKey" }` |
+| sns  |  `{ "arn" : "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
 Example Request:
 
