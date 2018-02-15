@@ -16,8 +16,6 @@ This feature can be used in conjunction with a GET request to copy communication
     2. If creating organisation-level settings you must provide ONLY the organisationId and NOT the accountId.
     3. Only ADMIN users can create organisation-level settings.
     4. With organisation-level user-based (email & sms) settings, the onus is on you to ensure these users have at least read-only access to all accounts.
-3. Guidelines for writing the setting filter:
-    1. if you want checks of all
 
 ##### Endpoints:
 
@@ -33,7 +31,7 @@ This feature can be used in conjunction with a GET request to copy communication
       - `enabled`: Boolean, true for turning on, false for turning off this channel.
       - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
       - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
-      - `configuration`: Object containing parameters that are different for each channel. More info to come
+      - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
 
 
 ##### Filtering
@@ -48,6 +46,18 @@ The table below give more information about filter options:
 | `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
 | `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
 
+
+
+##### Configuration
+The table below give more information about configuration options:
+
+| Channel  | Values Explaination or Example |
+| ------------- | ------------- |
+| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
+| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
+| slack  |  ```{ \n "url" : "'https://hooks.slack.com/services/your-slack-webhook', `n "channel": "#your-channel"  \n }```  |
+| pager-duty  |    |
+| sns  |    |
 
 Example Request:
 
