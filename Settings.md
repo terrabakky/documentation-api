@@ -2,9 +2,10 @@
 
 Below is a list of the available API calls:
 
-- [Create A Communication Setting](#create-a-communication-setting)
+- [Create Communication Settings](#create-communication-settings)
+- [Get Communication Settings](#get-communication-settings)
 
-## Create A communication Setting
+## Create Communication Settings
 This endpoint is used to create a new one-way communication channel setting.
 This feature can be used in conjunction with a GET request to copy communication settings from one account to others. An example of this function is provided in the examples folder.
 
@@ -51,7 +52,7 @@ The table below give more information about filter options:
 ##### Configuration
 The table below give more information about configuration options:
 
-| Channel  | Values Explaination or Example |
+| Channel  | Configuration |
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
@@ -133,3 +134,44 @@ Example Response:
     }
 ]
 ```
+
+
+
+
+
+## Get Communication Settings
+
+A GET request to this endpoint allows you to get communication settings of the specified account.
+This feature can be used in conjunction with a POST request to copy communication settings from one account to others. An example of this function is provided in the examples folder.
+
+
+##### Endpoints:
+
+`GET /settings/communication/accountId`
+
+##### Parameters
+- `accountId`: The ID of the account
+- `channel`: Optional parameter if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
+
+| User ROLE  | Organisation-Level Settings | Account-Level Settings |
+| ------------- | ------------- |
+| ADMIN  | Full settings with configurations | Full settings with configurations |
+| user with FULL access to the account  | Settings without configurations | Full settings with configurations |
+| user with READONLY access to the account  |  No settings | Settings without configurations | 
+| user with NO access to the account  |  No settings  | No settings |
+
+
+
+
+Example Request:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/accounts/H19NxMi5-/settings/rules
+```
+Example Response:
