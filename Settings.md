@@ -26,8 +26,8 @@ This feature can be used in conjunction with a GET request to copy communication
 ##### Parameters
 - `data`: an JSON object containing JSONAPI compliant data object with following properties
   - `attributes`: An attribute object containing
-    - `accountId`: String, required if creating an account-level setting
-    - `organisationId`: String, required if creating an organisation-level setting
+    - `accountId`: String, required if creating an account-level setting (Cloud Conformity accountId)
+    - `organisationId`: String, required if creating an organisation-level setting (Cloud Conformity organisationId)
     - `communicationSettings`: An array of objects, each object contains
       - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
       - `enabled`: Boolean, true for turning on, false for turning off this channel.
@@ -152,7 +152,7 @@ This feature can be used in conjunction with a POST request to copy communicatio
 `GET /settings/communication/accountId`
 
 ##### Parameters
-- `accountId`: The ID of the account
+- `accountId`: The Cloud Conformity ID of the account
 - `channel`: Optional parameter if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
 
 **IMPORTANT:**
@@ -357,8 +357,8 @@ A PATCH request to this endpoint allows you to update a specific communication s
 ##### Parameters
 - `data`: an JSON object containing JSONAPI compliant data object with following properties
   - `attributes`: An attribute object containing
-    - `accountId`: String, required if updating an account-level setting
-    - `organisationId`: String, required if updating an organisation-level setting
+    - `accountId`: String, required if updating an account-level setting (Cloud Conformity accountId)
+    - `organisationId`: String, required if updating an organisation-level setting (Cloud Conformity organisationId)
     - `channel`: String, must match channel in the settingId
     - `enabled`: Boolean, true for turning on, false for turning off this channel.
     - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.

@@ -205,7 +205,7 @@ This endpoint allows you to get the details of the specified account.
 `GET /accounts/id`
 
 ##### Parameters
-- `id`: The ID of the account
+- `id`: The Cloud Conformity ID of the account
 
 
 Example Request:
@@ -325,7 +325,7 @@ IMPORTANT:
 `POST /accounts/id/scan`
 
 ##### Parameters
-- `id`: The ID of the account
+- `id`: The Cloud Conformity ID of the account
 
 Example Request:
 
@@ -355,7 +355,7 @@ For example, even if our bots run rule RDS-018 for your account hourly, if you h
 `GET /accounts/accountId/settings/rules/ruleId`
 
 ##### Parameters
-- `accountId`: The ID of the account
+- `accountId`: The Cloud Conformity ID of the account
 - `ruleId`: The ID of the rule
 - `notes`: Optional parameter (boolean) to get notes for the specified rule setting
 
@@ -599,7 +599,7 @@ For example, even if our bots run rule RDS-018 for your account hourly, if you h
 `GET /accounts/accountId/settings/rules`
 
 ##### Parameters
-- `accountId`: The ID of the account
+- `accountId`: The Cloud Conformity ID of the account
 
 
 
