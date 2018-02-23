@@ -38,6 +38,6 @@ Example Response:
 You need data.id (`77923950-9ab1-11e7-9ebb-4794edfe32bf`) for registering a new account.
 
 IMPORTANT:  
-> For security reasons, External Ids are only valid for one hour
+> For security reasons, External Ids are only valid for one hour. If you do not use it to create an account within the hour, you must generate a new external id and start over.
 
 
