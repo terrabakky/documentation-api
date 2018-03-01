@@ -85,10 +85,9 @@ Example Response:
 }
 
 ```
+<br />
 
-
-
-From the previous request returned an AWS event, to see of there are any related check-events (children), the following request can be made.
+The previous request returned an AWS event. To see of there are any related check-events (children), the following request can be made.
 
 ```
 GET /events?accountIds=ryi9NPivK&filter[aws]=true&filter[cc]=true&filter[parentId]=rkTkAsr_GSJlpyCoB_M
