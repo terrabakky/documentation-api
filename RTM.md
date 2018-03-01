@@ -28,24 +28,6 @@ This endpoint allows you to collect events that you have access to.
 ##### Filtering
 The `filter` query parameter is reserved to be used as the basis for filtering.
 
-
-For example, the following is a request for a page of checks filtered by service `EC2`:
-
-```
-GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[services]=EC2
-```
-
-Multiple filter values can be combined in a comma-separated list. For example the following is a request for a page of checks in `us-west-2` or `us-west-1` regions:
-```
-GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-1,us-west-2
-```
-
-Furthermore, multiple filters can be applied to a single request. For example, the following is a request to get checks for `us-west-2` region when the status of the check is `SUCCESS`, and it's for `EC2` or `IAM` service in `security` category with `HIGH` risk level
-```
-GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-2&filter[statuses]=SUCCESS&filter[categories]=security&filter[riskLevels]=HIGH&filter[services]=EC2,IAM
-```
-
-
 The table below give more information about filter options:
 
 | Name  | Values |
@@ -65,57 +47,100 @@ The table below give more information about filter options:
 <br />
 
 
-Example Request:
+For example, the following is a request for static-deployer events within a specified time frame on one account:
 
 ```
-curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/checks?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-2&filter[ruleIds]=EC2-001,EC2-002&filter[statuses]=SUCCESS&filter[categories]=security&filter[riskLevels]=HIGH&filter[services]=EC2&filter[createdDate]=1502572157914
+curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/events?accountIds=ryi9NPivK&filter[aws]=true&filter[identities]=static-deployer&filter[since]=1519919272016&filter[until]=1519932055819
 ```
 Example Response:
-###### Note the size of this response can be quite large and the example below is purposefully truncated
+###### Each event can be quite large and the example below is purposefully truncated
 
 ```
 {
     "data": [
         {
-            "type": "checks",
-            "id": "ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test",
+            "type": "events",
+            "id": "rkTkAsr_GSJlpyCoB_M",
             "attributes": {
-                "region": "global",
-                "status": "FAILURE",
-                "risk-level": "LOW",
-                "message": "IAM Group test contains no user",
-                "last-modified-date": 1500166639466,
-                "last-updated-date": 1500166639466,
-                "failure-discovery-date": 1498910777689,
-                "last-updated-by": "SYSTEM",
-                "ccrn": "ccrn:aws:r1gyR4cqg:IAM:global:groups-test",
-                "tags": [],
-                "cost": 0,
-                "waste": 0
+                "name": "account.monitoring.activity",
+                "time": 1519922649000,
+                "service": "cloudfront.amazonaws.com",
+                "identity": "static-deployer",
+                "region": "us-east-1",
+                "description": "cloudfront.amazonaws.com/CreateInvalidation"
             },
             "relationships": {
-                "rule": {
-                    "data": {
-                        "type": "rules",
-                        "id": "IAM-017"
-                    }
-                },
                 "account": {
                     "data": {
-                        "type": "accounts",
-                        "id": "r1gyR4cqg"
+                        "type": "account",
+                        "id": "ryi9NPivK"
                     }
-                },
-                "event": {
-                    "data": null
                 }
             }
         }
-
     ],
     "meta": {
-        "total-pages": 714
+        "total-pages": 1
+    }
+}
+
+```
+
+
+
+From the previous request returned an AWS event, to see of there are any related check-events (children), the following request can be made.
+
+```
+GET /events?accountIds=ryi9NPivK&filter[aws]=true&filter[cc]=true&filter[parentId]=rkTkAsr_GSJlpyCoB_M
+```
+
+Example Response:
+###### Each event can be quite large and the example is truncated
+```
+{
+    "data": [
+        {
+            "type": "events",
+            "id": "rJmgCjr_fHJeXgAiHOG",
+            "attributes": {
+                "name": "account.event.check",
+                "time": 1519922665504,
+                "service": "RTM",
+                "region": "us-east-1",
+                "status": "FAILURE",
+                "description": "An activity in an unauthorised region (us-east-1) has been detected",
+                "risk-level": "VERY_HIGH"
+            },
+            "relationships": {
+                "account": {
+                    "data": {
+                        "type": "account",
+                        "id": "ryi9NPivK"
+                    }
+                }
+                "parent": {
+                    "data": {
+                        "type": "event",
+                        "id": "rkTkAsr_GSJlpyCoB_M"
+                    }
+                },
+                "rule": {
+                    "data": {
+                        "type": "rule",
+                        "id": "RTM-008"
+                    }
+                },
+                "check": {
+                    "data": {
+                        "type": "check",
+                        "id": "ccc:ryi6NPivW:RTM-008:RTM:us-east-1:"
+                    }
+                }
+            }
+        }
+    ],
+    "meta": {
+        "total-pages": 1,
     }
 }
 ```
-
