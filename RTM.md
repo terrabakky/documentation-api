@@ -1,23 +1,29 @@
-# Cloud Conformity Checks API
+# Cloud Conformity Real-Time Monitoring API
 
 Below is a list of the available APIs:
 
-- [List All Checks](#list-all-checks)
+- [List All Events](#list-all-events)
 
 
-## List All Checks
+## List All Events
 
-This endpoint allows you to collect checks for a specified account.
+This endpoint allows you to collect events that you have access to.
 
 ##### Endpoints:
 
-`GET /checks`
+`GET /rtm/events`
 
 ##### Parameters
-- `accountIds`: A comma-separated list of Cloud Conformity accountIds.
+- `accountIds`: A comma-separated list of Cloud Conformity accountIds. 
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
-- `filter`: Optional parameter including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
+- `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, until, cc, and aws.
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
+1. If acountIds are not provided, events are returned from all accounts you have access to. If you are ADMIN, organisation-level events are also returned.
+2. If you provide an accountId to an accountyou do not have at least ReadOnly access to, events from that account will not be returned.
+3. If specific acocunts or filters are not provided, the size of the response can get very large. We
 
 
 ##### Filtering
@@ -27,17 +33,17 @@ The `filter` query parameter is reserved to be used as the basis for filtering.
 For example, the following is a request for a page of checks filtered by service `EC2`:
 
 ```
-GET /checks?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[services]=EC2
+GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[services]=EC2
 ```
 
 Multiple filter values can be combined in a comma-separated list. For example the following is a request for a page of checks in `us-west-2` or `us-west-1` regions:
 ```
-GET /checks?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-1,us-west-2
+GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-1,us-west-2
 ```
 
 Furthermore, multiple filters can be applied to a single request. For example, the following is a request to get checks for `us-west-2` region when the status of the check is `SUCCESS`, and it's for `EC2` or `IAM` service in `security` category with `HIGH` risk level
 ```
-GET /checks?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-2&filter[statuses]=SUCCESS&filter[categories]=security&filter[riskLevels]=HIGH&filter[services]=EC2,IAM
+GET /events?accountIds=r1gyR4cqg&page[size]=100&page[number]=0&filter[regions]=us-west-2&filter[statuses]=SUCCESS&filter[categories]=security&filter[riskLevels]=HIGH&filter[services]=EC2,IAM
 ```
 
 
