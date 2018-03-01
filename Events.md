@@ -1,4 +1,4 @@
-# Cloud Conformity Real-Time Monitoring API
+# Cloud Conformity Events API
 
 Below is a list of the available APIs:
 
@@ -11,7 +11,7 @@ This endpoint allows you to collect events that you have access to.
 
 ##### Endpoints:
 
-`GET /rtm/events`
+`GET /events`
 
 ##### Parameters
 - `accountIds`: A comma-separated list of Cloud Conformity accountIds. 
