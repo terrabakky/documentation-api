@@ -42,8 +42,8 @@ This endpoint is used to register a new AWS account with Cloud Conformity.
       - `keys`: An object containing
         - `roleArn`: The Role ARN of the role you have already created to grant access to Cloud Conformity
         - `externalId`: The External ID that you have requested on the previous step
-    - `costPackage`: true | false - Whether or not enable the cost package for the account
-    - `securityPackage`: true | false - Whether or not enable the security package for the account
+    - `costPackage`: Boolean, true for enabling the cost package add-on for the account (AWS spend analysis, forecasting, monitoring)
+    - `securityPackage`: Boolean, true for enabling the security package add-on for the account (real-time monitoring, additional security rules)
 
 Example Request:
 
