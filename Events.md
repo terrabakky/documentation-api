@@ -15,6 +15,8 @@ This endpoint allows you to collect events that you have access to.
 
 ##### Parameters
 - `accountIds`: A comma-separated list of Cloud Conformity accountIds. 
+- `aws`: true | false; true for returning Cloud Conformity activity-events.
+- `cc`: true | false; true for returning AWS events and the associated check-events. 
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
 - `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, until, cc, and aws.
@@ -42,8 +44,7 @@ The table below give more information about filter options:
 | filter[parentId] | Only check-events will have a parentId. parentId refers to the parent AWS event. |
 | filter[since]  | Refers to the start of the time range you want to query for events.<br /><br />The numeric value of the specified time as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
 | filter[until]  |  Refers to the end of the time range you want to query for events.<br /><br />The numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
-| filter[cc]  | Boolean, true for returning Cloud Conformity activity-events. |
-| filter[aws]  | Boolean, true for returning AWS events and the associated check-events. |
+| filter[parentOnly]  | Boolean, true for not returning check-events. Defaults to false if NOT specified. |
 <br />
 
 
