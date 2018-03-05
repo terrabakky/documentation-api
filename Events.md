@@ -15,8 +15,8 @@ This endpoint allows you to collect events that you have access to.
 
 ##### Parameters
 - `accountIds`: A comma-separated list of Cloud Conformity accountIds. 
-- `aws`: true | false; true for returning Cloud Conformity activity-events.
-- `cc`: true | false; true for returning AWS events and the associated check-events. 
+- `aws`: true | false; true for returning Cloud Conformity activity-events and check-events.
+- `cc`: true | false; true for returning AWS events. 
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
 - `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, until, cc, and aws.
@@ -51,7 +51,7 @@ The table below give more information about filter options:
 For example, the following is a request for static-deployer events within a specified time frame on one account:
 
 ```
-curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/events?accountIds=ryi9NPivK&filter[aws]=true&filter[identities]=static-deployer&filter[since]=1519919272016&filter[until]=1519932055819
+curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/events?accountIds=ryi9NPivK&aws=true&filter[identities]=static-deployer&filter[since]=1519919272016&filter[until]=1519932055819
 ```
 Example Response:
 ###### Each event can be quite large and the example below is purposefully truncated
@@ -91,7 +91,7 @@ Example Response:
 The previous request returned an AWS event. To see of there are any related check-events (children), the following request can be made.
 
 ```
-GET /events?accountIds=ryi9NPivK&filter[aws]=true&filter[cc]=true&filter[parentId]=rkTkAsr_GSJlpyCoB_M
+GET /events?accountIds=ryi9NPivK&aws=true&cc=true&filter[parentId]=rkTkAsr_GSJlpyCoB_M
 ```
 
 Example Response:
