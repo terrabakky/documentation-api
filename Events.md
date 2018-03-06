@@ -41,7 +41,7 @@ The table below give more information about filter options:
 | filter[ruleIds]  | EC2-001 \| EC2-002 \| etc... Only activity-events will have ruleIds. (e.g. configuring rule settings)<br /><br />For more information about rules, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | filter[userIds]  | A comma-separated list of Cloud Conformity userIds. Only activity-events will have userIds. |
 | filter[identities]| Only incoming AWS events will have identities. |
-| filter[parentId] | Only check-events will have a parentId. parentId refers to the parent AWS event. |
+| filter[parentId] | Only check-events will have a parentId. Main events that have associated check-events will have the attribute `hasChildren: true` |
 | filter[since]  | Refers to the start of the time range you want to query for events.<br /><br />The numeric value of the specified time as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
 | filter[until]  |  Refers to the end of the time range you want to query for events.<br /><br />The numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
 <br />
