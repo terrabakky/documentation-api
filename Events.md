@@ -15,8 +15,8 @@ This endpoint allows you to collect events that you have access to.
 
 ##### Parameters
 - `accountIds`: A comma-separated list of Cloud Conformity accountIds. 
-- `aws`: true | false; true for returning Cloud Conformity activity-events and check-events.
-- `cc`: true | false; true for returning AWS events. 
+- `aws`: true | false; defaults to true for returning AWS events.
+- `cc`: true | false; defaults to true for returning Cloud Conformity activity-events.
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
 - `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, until, cc, and aws.
@@ -25,10 +25,10 @@ This endpoint allows you to collect events that you have access to.
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. If acountIds are not provided, events are returned from all accounts you have access to. If you are ADMIN, organisation-level events are also returned.
 2. If you provide an accountId to an account you do not have at least ReadOnly access to, events from that account will not be returned.
-3. You can pull 3 types of events from this endpoint. **Events** that we receive from AWS, **activity-events** from cloud conformity users, and **check-events** which are children of the former two types of events. For more information, see examples below.
+3. You can pull 3 types of events from this endpoint. The first two types are main (parent) events: `aws=true` will return **AWS events**, `cc=true` will return Cloud Conformity **activity-events**. If querying by `filter[parentId]` the **check-events** (children or sub-events) will be returned. For more information, see examples below.
 
 ##### Filtering
-The `filter` query parameter is reserved to be used as the basis for filtering.
+The `filter` query parameter is reserved to be used as the basis for filtering. Any plural filter parameters (e.g. filter[region **s**]) accepts a comma-seperated list. E.g. `filter[regions]=us-east-1,us-east-2`
 
 The table below give more information about filter options:
 
@@ -44,14 +44,13 @@ The table below give more information about filter options:
 | filter[parentId] | Only check-events will have a parentId. parentId refers to the parent AWS event. |
 | filter[since]  | Refers to the start of the time range you want to query for events.<br /><br />The numeric value of the specified time as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
 | filter[until]  |  Refers to the end of the time range you want to query for events.<br /><br />The numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
-| filter[parentOnly]  | Boolean, true for not returning check-events. Defaults to false if NOT specified. |
 <br />
 
 
 For example, the following is a request for static-deployer events within a specified time frame on one account:
 
 ```
-curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/events?accountIds=ryi9NPivK&aws=true&filter[identities]=static-deployer&filter[since]=1519919272016&filter[until]=1519932055819
+curl -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" https://us-west-2-api.cloudconformity.com/v1/events?accountIds=ryi9NPivK&filter[identities]=static-deployer&filter[since]=1519919272016&filter[until]=1519932055819
 ```
 Example Response:
 ###### Each event can be quite large and the example below is purposefully truncated
@@ -91,7 +90,7 @@ Example Response:
 The previous request returned an AWS event. To see of there are any related check-events (children), the following request can be made.
 
 ```
-GET /events?accountIds=ryi9NPivK&aws=true&cc=true&filter[parentId]=rkTkAsr_GSJlpyCoB_M
+GET /events?accountIds=ryi9NPivK&filter[parentId]=rkTkAsr_GSJlpyCoB_M
 ```
 
 Example Response:
