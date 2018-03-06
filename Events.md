@@ -67,7 +67,8 @@ Example Response:
                 "service": "cloudfront.amazonaws.com",
                 "identity": "static-deployer",
                 "region": "us-east-1",
-                "description": "cloudfront.amazonaws.com/CreateInvalidation"
+                "description": "cloudfront.amazonaws.com/CreateInvalidation",
+                "hasChildren": true
             },
             "relationships": {
                 "account": {
