@@ -19,7 +19,7 @@ This endpoint allows you to collect events that you have access to.
 - `cc`: true | false; defaults to true for returning Cloud Conformity activity-events.
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
-- `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, until, cc, and aws.
+- `filter`: Optional parameter including services, regions, statuses, riskLevels, ruleIds, userIds, identities, parentId, since, and until.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
