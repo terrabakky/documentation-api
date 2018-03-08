@@ -19,13 +19,13 @@ This endpoint allows you to collect events that you have access to.
 - `cc`: true | false; defaults to true for returning Cloud Conformity activity-events.
 - `page[size]`: Indicates the number of results that should be returned. Maximum value is 1000 and defaults to 100 if not specified
 - `page[number]`: Indicates the page number, defaults to 0
-- `filter`: Optional parameter including services, regions, statuses, ruleIds, userIds, identities, since, and until.
+- `filter`: Optional parameter including services, regions, userIds, identities, since, and until.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. If acountIds are not provided, events are returned from all accounts you have access to. If you are ADMIN, organisation-level events are also returned.
 2. If you provide an accountId to an account you do not have at least ReadOnly access to, events from that account will not be returned.
-3. You can pull 2 types of events from this endpoint. The first is main (parent) events: `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see examples below.
+3. You can pull 2 types of events from this endpoint. `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see examples below.
 
 ##### Filtering
 The `filter` query parameter is reserved to be used as the basis for filtering. Any plural filter parameters (e.g. filter[region **s**]) accepts a comma-seperated list. E.g. `filter[regions]=us-east-1,us-east-2`
@@ -36,8 +36,6 @@ The table below give more information about filter options:
 | ------------- | ------------- |
 | filter[regions]  | global \| us-east-2 \| us-east-1 \| us-west-1 \| us-west-2 \| ap-south-1 \| ap-northeast-2 \|<br />ap-southeast-1 \| ap-southeast-2 \| ap-northeast-1 \| ca-central-1 \| eu-central-1 \| eu-west-1 \|<br /> eu-west-2 \| sa-east-1 <br /><br />For more information about regions, please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions) |
 | filter[services]  | AutoScaling \| CloudConformity \|CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \| Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \|<br />SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \|<br />Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)<br /><br /> Additionally, events we recieve from AWS may have different service labels such as "ec2.amazonaws.com" |
-| filter[statuses]  | SUCCESS \| FAILURE \| Only check-events have statuses |
-| filter[ruleIds]  | EC2-001 \| EC2-002 \| etc... Only activity-events will have ruleIds. (e.g. configuring rule settings)<br /><br />For more information about rules, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | filter[userIds]  | A comma-separated list of Cloud Conformity userIds. Only activity-events will have userIds. |
 | filter[identities]| Only incoming AWS events will have identities. |
 | filter[since]  | Refers to the start of the time range you want to query for events.<br /><br />The numeric value of the specified time as the number of milliseconds since January 1, 1970, 00:00:00 UTC |
