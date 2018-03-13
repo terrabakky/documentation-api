@@ -6,6 +6,8 @@ Below is a list of the available API calls:
 - [List All Accounts](#list-all-accounts)
 - [Get Account Details](#get-account-details)
 - [Scan Account](#scan-account)
+- [Update Account Subscription](#update-account-subscription)
+- [Update Account](#update-account)
 - [Get Rule Setting](#get-rule-setting)
 - [Update Rule Setting](#update-rule-setting)
 - [Get Rule Settings](#get-rule-settings)
@@ -343,6 +345,147 @@ Example Response:
     ]
 }
 ```
+
+
+
+## Update account subscription
+
+A PATCH request to this endpoint allows you to change the add-on package subscription of the specified account.
+We recommend you first [Get account details](#get-account-details) to verify that the subscription needs to be updated. 
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Only ADMIN users can use this endpoint.
+
+##### Endpoints:
+
+`PATCH /accounts/accountId/subscription`
+
+##### Parameters
+- `data`: an JSON object containing JSONAPI compliant data object with following properties
+  - `attributes`: An attribute object containing
+    - `costPackage`: Boolean, true for enabling the cost package add-on for the account (AWS spend analysis, forecasting, monitoring)
+    - `securityPackage`: Boolean, true for enabling the security package add-on for the account (real-time monitoring, additional security rules)
+
+Example Request:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": {
+        "attributes": {
+            "costPackage": true,
+            "securityPackage": true
+        }
+    }
+}' \
+https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb/subscription
+```
+Example Response:
+
+```
+{
+    "data": {
+        "type": "accounts",
+        "id": "AgA12vIwb",
+        "attributes": {
+            "name": "myCCaccount",
+            "environment": "myAWSenv",
+            "awsaccount-id": "123456789101",
+            "status": "ACTIVE",
+            "security-package": true,
+            "cost-package": true,
+            "last-notified-date": 1504113512701,
+            "last-checked-date": 1504113511956,
+            "available-runs": 5,
+        },
+        "relationships": {
+            "organisation": {
+                "data": {
+                    "type": "organisations",
+                    "id": "B1nHYYpwx"
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
+## Update account
+
+A PATCH request to this endpoint allows changes to the account name, enviornment, and code.
+We recommend you first [Get account details](#get-account-details) to check what existing value of these attributes are.
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Only ADMINs and users with FULL access to the specified account can use this endpoint.
+
+##### Endpoints:
+
+`PATCH /accounts/accountId`
+
+##### Parameters
+- `data`: an JSON object containing JSONAPI compliant data object with following properties
+  - `attributes`: An attribute object containing
+    - `name`: The name of the account.
+    - `environment`: The environment of the account. (optional)
+    - `code`: A 3-character code you can use to identify the account easily when using the CloudConformity web UI (optional).
+
+Example Request:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": {
+        "attributes": {
+            "name": "myProductionAccount",
+            "environment": "myProductionEnvironment",
+            "code": "PAE"
+        }
+    }
+}' \
+https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb
+```
+Example Response:
+
+```
+{
+    "data": {
+        "type": "accounts",
+        "id": "AgA12vIwb",
+        "attributes": {
+            "name": "myProductionAccount",
+            "environment": "myProductionEnvironment",
+            "code": "PAE",
+            "awsaccount-id": "123456789101",
+            "status": "ACTIVE",
+            "security-package": true,
+            "cost-package": true,
+            "last-notified-date": 1504113512701,
+            "last-checked-date": 1504113511956,
+            "available-runs": 5,
+        },
+        "relationships": {
+            "organisation": {
+                "data": {
+                    "type": "organisations",
+                    "id": "B1nHYYpwx"
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
 
 ## Get Rule Setting
 

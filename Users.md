@@ -23,6 +23,8 @@ User access to each endpoint is listed below:
 | GET /accounts  *(get a list of accounts you have access to)* | Y | Y | Y | Y |
 | GET /accounts/id | Y | Y | Y | N |
 | POST /accounts/id/scan  *(run the conformity bot)* | Y | Y | N | N |
+| PATCH /accounts/accountId/subscription | Y | N | N | N |
+| PATCH /accounts/accountId | Y | Y | N | N |
 | GET /accounts/accountId/settings/rules/ruleId | Y | Y | Y | N |
 | PATCH /accounts/accountId/settings/rules/ruleId | Y | Y | N | N |
 | GET /accounts/accountId/settings/rules | Y | Y | Y | N |
