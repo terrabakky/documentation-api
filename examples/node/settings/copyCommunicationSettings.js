@@ -10,6 +10,7 @@ let options = {
 	method: 'GET',
 	uri: `https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=${fromAccountId}`,
 	headers: {
+		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
 	},
 	json: true

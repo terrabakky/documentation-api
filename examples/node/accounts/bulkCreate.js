@@ -25,6 +25,7 @@ Promise.mapSeries(accounts, function(account) {
 		method: 'POST',
 	    uri: 'https://us-west-2-api.cloudconformity.com/v1/external-ids',
 	    headers: {
+	    	"Content-Type": "application/vnd.api+json",
 	        'Authorization': `ApiKey ${APIKey}`
 	    },
 	    json: true

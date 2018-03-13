@@ -8,6 +8,7 @@ let options = {
 	method: 'POST',
 	uri: `${Endpoint}`,
 	headers: {
+		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
 	},
 	json: true
