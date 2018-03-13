@@ -12,6 +12,7 @@ Below is a list of the available API calls:
 - [Update Rule Setting](#update-rule-setting)
 - [Get Rule Settings](#get-rule-settings)
 - [Update Rule Settings](#update-rule-settings)
+- [Delete Account](#delete-account)
 
 
 ## Create an Account
@@ -997,6 +998,38 @@ Rule enable status is not valid for `ruleId` | `ruleSetting.enabled` is a requir
 One or more rule setting property is invalid for `ruleId` | remove the `ruleSetting` property if it is not `id`, `enabled`, `riskLevel`, `extraSettings`, or `ruleExists`
 **Extra Settings**
 Rule `ruleId` is not configurable | remove `ruleSetting.extraSettings`, you may only change risk level or enable/disable this rule. If you are directly copying this rule from another account and getting this message, this rule may have been previously configurable and is no longer.
+
+
+
+
+## Delete account
+
+A DELETE request to this endpoint allows an ADMIN to delete the specified account.
+
+##### Endpoints:
+
+`DELETE /accounts/accountId`
+
+Example Request:
+```
+curl -X DELETE \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb
+```
+
+Example Response:
+
+```
+{
+    "meta": {
+        "status": "sent"
+    }
+}
+```
+
+
+
 
 
 
