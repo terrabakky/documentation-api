@@ -3,7 +3,10 @@ import json
 
 #Please substitute YOUR_ENDPOINT and YOUR_API_KEY
 endpoint = 'YOUR_ENDPOINT'
-headers = {'Authorization': 'ApiKey YOUR_API_KEY'}
+headers = {
+	'Content-Type': 'application/vnd.api+json',
+	'Authorization': 'ApiKey YOUR_API_KEY'
+}
 
 resp = requests.get(endpoint, headers=headers)
 
