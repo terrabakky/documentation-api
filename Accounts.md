@@ -351,7 +351,9 @@ Example Response:
 ## Update account subscription
 
 A PATCH request to this endpoint allows you to change the add-on package subscription of the specified account.
-We recommend you first [Get account details](#get-account-details) to verify that the subscription needs to be updated. 
+
+We recommend you first [Get account details](#get-account-details) to verify that the subscription needs to be updated.
+
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Only ADMIN users can use this endpoint.
 
@@ -382,6 +384,7 @@ curl -X PATCH \
 }' \
 https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb/subscription
 ```
+
 Example Response:
 
 ```
@@ -418,6 +421,7 @@ Example Response:
 ## Update account
 
 A PATCH request to this endpoint allows changes to the account name, enviornment, and code.
+
 We recommend you first [Get account details](#get-account-details) to check what existing value of these attributes are.
 
 **IMPORTANT:**
@@ -452,6 +456,7 @@ curl -X PATCH \
 }' \
 https://us-west-2-api.cloudconformity.com/v1/accounts/AgA12vIwb
 ```
+
 Example Response:
 
 ```
