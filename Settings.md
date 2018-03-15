@@ -5,7 +5,7 @@ Below is a list of the available API calls:
 - [Create Communication Settings](#create-communication-settings)
 - [Get Communication Settings](#get-communication-settings)
 - [Update Communication Setting](#update-communication-setting)
-- [Delete Setting](#delete-setting)
+- [Delete Communication Setting](#delete-communication-setting)
 
 ## Create Communication Settings
 This endpoint is used to create a new one-way communication channel setting.
@@ -465,9 +465,9 @@ Example Response:
 
 
 
-## Delete setting
+## Delete communication setting
 
-A DELETE request to this endpoint allows a user to delete a setting.
+A DELETE request to this endpoint allows a user to delete a communication setting.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;User role defines how they may use this endpoint:

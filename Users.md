@@ -32,7 +32,6 @@ User access to each endpoint is listed below:
 | POST /settings/communication ** | Y | Y | N | N |
 | PATCH /settings/communication/settingId ** | Y | Y | N | N |
 | DELETE /settings/settingId ** | Y | Y | N | N |
-
 | POST /external-ids | Y | N | N | N |
 | GET /users/whoami | Y | Y | Y | Y |
 
