@@ -29,7 +29,8 @@ This endpoint is used to create a custom checks. You may pass one check or an ar
         - `resource`: String, the AWS resource this check applies to.
         - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
         - `status`: String, SUCCESS or FAILURE
-        - `categories`: An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence        - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
+        - `categories`: An array of category (AWS well-architected framework category) strings from the following security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence
+        - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
         - `tags`: Array, an array of tag strings that follow the format: "key::value"
         - `extradata`: An array of objects, each object contains
           - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
