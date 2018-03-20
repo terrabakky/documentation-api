@@ -2,7 +2,152 @@
 
 Below is a list of the available APIs:
 
+- [Create Custom Checks](#create-custom-checks)
 - [List All Checks](#list-all-checks)
+
+
+
+## Create custom checks
+This endpoint is used to create a custom checks. You may pass one check or an array of checks in the JSON body.
+
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
+1. Checks are created as long as your inputs are valid. The onus is on you to ensure the checks you enter are meaningful and useful.
+
+##### Endpoints:
+
+`POST /checks`
+
+##### Parameters
+- `checks`: an JSON object
+    - `data`: a data array (or data object if only creating one check) containing JSONAPI compliant objects with following properties
+      - `type`: "checks"
+      - `attributes`: An attributes object containing
+        - `message`: String, descriptive message about the check
+        - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
+        - `resource`: String, the AWS resource this check applies to.
+        - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
+        - `status`: String, SUCCESS or FAILURE
+        - `categories`: An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence        - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
+        - `tags`: Array, an array of tag strings that follow the format: "key::value"
+        - `extradata`: An array of objects, each object contains
+          - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
+          - `enabled`: Boolean, true for turning on, false for turning off this channel.
+          - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
+          - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
+          - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
+      - `relationships`: A relationships object containing
+        - `account`: An account object containing
+          - `data`: A data object containing
+            - `id`: String, CloudConformity account id
+            - `type`: "accounts"
+
+
+##### Filtering
+The table below give more information about filter options:
+
+| Name  | Values |
+| ------------- | ------------- |
+| `filter.regions`  | An array of valid AWS region strings. (e.g. ["us-west-1", "us-west-2"])<br /> For more information about regions, please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions) |
+| `filter.services`  | An array of AWS service strings from the following: <br /> AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
+| `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
+| `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
+| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
+| `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
+
+
+
+##### Configuration
+The table below give more information about configuration options:
+
+| Channel  | Configuration |
+| ------------- | ------------- |
+| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
+| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
+| pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
+| sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
+
+
+Example request for creating an account level pager-duty setting:
+
+```
+curl -X POST \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+  "data": {
+    "attributes": {
+      "accountId": "H19NxM15-",
+      "communicationSettings": [
+        {
+          "enabled": true,
+           "filter": {
+                "riskLevels": ["EXTREME"],
+                "statuses": ["FAILURE"]
+           },
+            "configuration": {
+                "serviceName": "SomeName",
+                "serviceKey": "apagerdutyservicekey"
+            },
+            "channel": "pager-duty"
+        }
+      ]
+     }
+  }
+}' \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication
+```
+Example Response:
+
+```
+  [
+    {
+        "data": {
+            "type": "settings",
+            "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
+            "attributes": {
+                "type": "communication",
+                "manual": "",
+                "enabled": true,
+                "filter": {
+                    "riskLevels": [
+                        "EXTREME"
+                    ],
+                    "statuses": [
+                        "FAILURE"
+                    ]
+                },
+                "configuration": {
+                    "serviceName": "SomeName",
+                    "serviceKey": "apagerdutyservicekey"
+                },
+                "channel": "pager-duty"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    }
+]
+```
+
+
+
+
 
 
 ## List All Checks
