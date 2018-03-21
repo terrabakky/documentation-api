@@ -6,7 +6,6 @@ Below is a list of the available APIs:
 - [List All Checks](#list-all-checks)
 
 
-
 ## Create custom checks
 This endpoint is used to create a custom checks. You may pass one check or an array of checks in the JSON body.
 
@@ -14,64 +13,41 @@ This endpoint is used to create a custom checks. You may pass one check or an ar
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. Checks are created as long as your inputs are valid. The onus is on you to ensure the checks you enter are meaningful and useful.
+3. Each check object you enter will require a `check.relationships.account`. If you provide an account which you don't have WRITE access to, the check will not be saved.
+2. Check Ids are constructed from the parameters entered and follow the format:
+    1. **ccc:accountId:ruleId:service:region:resourceId**
+    2. If you add a check with the same `accountId`, `ruleId`, `service`, `region`, AND `resourceId` as another existing check in the database, this new check WILL write over the existing check.
+    3. Since resource is an optional attribute, checks entered without resource will not have the `resourceId` part of the check Id.
 
 ##### Endpoints:
 
 `POST /checks`
 
 ##### Parameters
-- `checks`: an JSON object
-    - `data`: a data array (or data object if only creating one check) containing JSONAPI compliant objects with following properties
-      - `type`: "checks"
-      - `attributes`: An attributes object containing
-        - `message`: String, descriptive message about the check
-        - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
-        - `resource`: String, the AWS resource this check applies to.
-        - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
-        - `status`: String, SUCCESS or FAILURE
-        - `categories`: An array of category (AWS well-architected framework category) strings from the following security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence
-        - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
-        - `tags`: Array, an array of tag strings that follow the format: "key::value"
-        - `extradata`: An array of objects, each object contains
-          - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
-          - `enabled`: Boolean, true for turning on, false for turning off this channel.
-          - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
-          - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
-          - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
-      - `relationships`: A relationships object containing
-        - `account`: An account object containing
-          - `data`: A data object containing
-            - `id`: String, CloudConformity account id
-            - `type`: "accounts"
+- `data`: a data array (or data object if only creating one check) containing JSONAPI compliant objects with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+    - `message`: String, descriptive message about the check
+    - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
+    - `resource`: String, the AWS resource this check applies to. (optional)
+    - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
+    - `status`: String, SUCCESS or FAILURE
+    - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
+    - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
+    - `not-scored`: Boolean, true for informational checks (optional)
+    - `tags`: Array, an array of tag strings that follow the format: "key::value" (optional)
+    - `extradata`: An array of objects (optional), each object must contain
+      - `label`: String, as it will appear on the client UI
+      - `name`: String, as reference for the back-end
+      - `type`: String, provide type as you see fit.
+      - `value`: Enter value as you see fit.
+  - `relationships`: A relationships object containing
+    - `account`: An account object containing
+      - `data`: A data object containing
+        - `id`: String, CloudConformity account id
+        - `type`: "accounts"
 
-
-##### Filtering
-The table below give more information about filter options:
-
-| Name  | Values |
-| ------------- | ------------- |
-| `filter.regions`  | An array of valid AWS region strings. (e.g. ["us-west-1", "us-west-2"])<br /> For more information about regions, please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions) |
-| `filter.services`  | An array of AWS service strings from the following: <br /> AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
-| `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
-| `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
-| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
-| `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
-
-
-
-##### Configuration
-The table below give more information about configuration options:
-
-| Channel  | Configuration |
-| ------------- | ------------- |
-| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
-| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
-| pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
-| sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
-
-
-Example request for creating an account level pager-duty setting:
+Example request for creating a check:
 
 ```
 curl -X POST \
@@ -79,59 +55,199 @@ curl -X POST \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
 -d '
 {
-  "data": {
-    "attributes": {
-      "accountId": "H19NxM15-",
-      "communicationSettings": [
+    "data": [
         {
-          "enabled": true,
-           "filter": {
-                "riskLevels": ["EXTREME"],
-                "statuses": ["FAILURE"]
-           },
-            "configuration": {
-                "serviceName": "SomeName",
-                "serviceKey": "apagerdutyservicekey"
+            "type": "checks",
+            "attributes": {
+                "extradata": [
+                    {
+                        "label": "This will show up on the UI",
+                        "name": "nameForReference",
+                        "type": "META",
+                        "value": "string or number or boolean"
+                    },
+                    {
+                        "label": "It is good to be descriptive",
+                        "name": "forReference",
+                        "type": "META",
+                        "value": "hello world!"
+                    }
+                ],
+                "message": "Descriptive message about this check",
+                "region": "us-west-2",
+                "resource": "sg-956d00ea",
+                "risk-level": "VERY_HIGH",
+                "status": "FAILURE",
+                "service": "EC2",
+                "categories": ["security"],
+                "tags": ["key0::value0", "key1::value1"]
             },
-            "channel": "pager-duty"
+            "relationships": {
+                "account": {
+                    "data": {
+                        "id": "H19NxM15-",
+                        "type": "accounts"
+                    }
+                }
+            },
+        },
+        {
+            "attributes": {
+                "extradata": [
+                    {
+                        "label": "Attachments",
+                        "name": "Attachments",
+                        "type": "META",
+                        "value": ""
+                    },
+                    {
+                        "label": "Description",
+                        "name": "Description",
+                        "type": "META",
+                        "value": "default VPC security group"
+                    },
+                    {
+                        "label": "Group Id",
+                        "name": "GroupId",
+                        "type": "META",
+                        "value": "sg-2e885d00"
+                    },
+                    {
+                        "label": "Group Name",
+                        "name": "GroupName",
+                        "type": "META",
+                        "value": "default"
+                    },
+                    {
+                        "label": "Vpc Id",
+                        "name": "VpcId",
+                        "type": "META",
+                        "value": "vpc-c7000fa3"
+                    }
+                ],
+                "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
+                "not-scored": false,
+                "region": "us-west-2",
+                "resource": "sg-2e885d00",
+                "risk-level": "VERY_HIGH",
+                "categories": ["security"],
+                "service": "EC2",
+                "status": "FAILURE"
+            },
+            "relationships": {
+                "account": {
+                    "data": {
+                        "id": "H19NxM15-",
+                        "type": "accounts"
+                    }
+                }
+            },
+            "type": "checks"
         }
-      ]
-     }
-  }
+    ]
 }' \
-https://us-west-2-api.cloudconformity.com/v1/settings/communication
+https://us-west-2-api.cloudconformity.com/v1/checks
 ```
 Example Response:
 
 ```
-  [
-    {
-        "data": {
-            "type": "settings",
-            "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
+{
+    "data": [
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea",
             "attributes": {
-                "type": "communication",
-                "manual": "",
-                "enabled": true,
-                "filter": {
-                    "riskLevels": [
-                        "EXTREME"
-                    ],
-                    "statuses": [
-                        "FAILURE"
-                    ]
-                },
-                "configuration": {
-                    "serviceName": "SomeName",
-                    "serviceKey": "apagerdutyservicekey"
-                },
-                "channel": "pager-duty"
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "message": "Descriptive message about this check",
+                "resource": "sg-956d00ea",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "This will show up on the UI",
+                        "name": "nameForReference",
+                        "type": "META",
+                        "value": "string or number or boolean"
+                    },
+                    {
+                        "label": "It is good to be descriptive",
+                        "name": "forReference",
+                        "type": "META",
+                        "value": "hello world!"
+                    }
+                ],
+                "tags": ["key0::value0", "key1::value1"]
             },
             "relationships": {
-                "organisation": {
+                "rule": {
                     "data": {
-                        "type": "organisations",
-                        "id": "ryqMcJn4b"
+                        "type": "rules",
+                        "id": "CUSTOM-001"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        },
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-2e885d00",
+            "attributes": {
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
+                "resource": "sg-2e885d48",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "Attachments",
+                        "name": "Attachments",
+                        "type": "META",
+                        "value": ""
+                    },
+                    {
+                        "label": "Description",
+                        "name": "Description",
+                        "type": "META",
+                        "value": "default VPC security group"
+                    },
+                    {
+                        "label": "Group Id",
+                        "name": "GroupId",
+                        "type": "META",
+                        "value": "sg-2e885d00"
+                    },
+                    {
+                        "label": "Group Name",
+                        "name": "GroupName",
+                        "type": "META",
+                        "value": "default"
+                    },
+                    {
+                        "label": "Vpc Id",
+                        "name": "VpcId",
+                        "type": "META",
+                        "value": "vpc-c7000fa3"
+                    }
+                ]
+            },
+            "relationships": {
+                "rule": {
+                    "data": {
+                        "type": "rules",
+                        "id": "CUSTOM-001"
                     }
                 },
                 "account": {
@@ -142,12 +258,9 @@ Example Response:
                 }
             }
         }
-    }
-]
+    ]
+}
 ```
-
-
-
 
 
 
