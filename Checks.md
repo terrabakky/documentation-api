@@ -4,6 +4,8 @@ Below is a list of the available APIs:
 
 - [Create Custom Checks](#create-custom-checks)
 - [List All Checks](#list-all-checks)
+- [Delete Check](#delete-check)
+
 
 
 ## Create custom checks
@@ -372,4 +374,36 @@ Example Response:
     }
 }
 ```
+
+
+
+
+
+## Delete check
+
+A DELETE request to this endpoint allows a user with WRITE access to the associated account to delete the check.
+
+##### Endpoints:
+
+`DELETE /checks/checkId`
+
+Example Request:
+```
+curl -X DELETE \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea
+```
+
+Example Response:
+
+```
+{
+    "meta": [{
+        "status": "success",
+        "message": "Check successfully deleted"
+    }]
+}
+```
+
 
