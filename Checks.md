@@ -37,17 +37,21 @@ This endpoint is used to create a custom checks. You may pass one check or an ar
     - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
     - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
     - `not-scored`: Boolean, true for informational checks (optional)
-    - `tags`: Array, an array of tag strings that follow the format: "key::value" (optional)
+    - `tags`: Array, an array of tag strings that follow the format: "key::value". You can enter a max of 20 tags, each tag must not exceed 50 characters. (optional)
     - `extradata`: An array of objects (optional), each object must contain
-      - `label`: String, as it will appear on the client UI
-      - `name`: String, as reference for the back-end
-      - `type`: String, provide type as you see fit.
-      - `value`: Enter value as you see fit.
+      - `label`: String, as it will appear on the client UI. Character limit of 20
+      - `name`: String, as reference for the back-end. Character limit of 20
+      - `type`: String, provide type as you see fit. Character limit of 20
+      - `value`: Enter value as you see fit. If entering a number or string, length must not exceed 150.
   - `relationships`: A relationships object containing
     - `account`: An account object containing
       - `data`: A data object containing
         - `id`: String, CloudConformity account id
         - `type`: "accounts"
+    - `rule`: An rule object containing
+      - `data`: A data object containing
+        - `id`: "CUSTOM-001" 
+        - `type`: "rules"
 
 Example request for creating a check:
 
@@ -89,6 +93,12 @@ curl -X POST \
                     "data": {
                         "id": "H19NxM15-",
                         "type": "accounts"
+                    }
+                },
+                "rule": {
+                    "data": {
+                        "id": "CUSTOM-001",
+                        "type": "rules"
                     }
                 }
             },
@@ -141,6 +151,12 @@ curl -X POST \
                     "data": {
                         "id": "H19NxM15-",
                         "type": "accounts"
+                    }
+                },
+                "rule": {
+                    "data": {
+                        "id": "CUSTOM-001",
+                        "type": "rules"
                     }
                 }
             },
