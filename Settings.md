@@ -5,6 +5,7 @@ Below is a list of the available API calls:
 - [Create Communication Settings](#create-communication-settings)
 - [Get Communication Settings](#get-communication-settings)
 - [Update Communication Setting](#update-communication-setting)
+- [Delete Communication Setting](#delete-communication-setting)
 
 ## Create Communication Settings
 This endpoint is used to create a new one-way communication channel setting.
@@ -459,6 +460,48 @@ Example Response:
     }
 ]
 ```
+
+
+
+
+
+## Delete communication setting
+
+A DELETE request to this endpoint allows a user to delete a communication setting.
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;User role defines how they may use this endpoint:
+1. Only ADMIN users can delete organisation-level settings.
+2. For an account-level setting, both ADMINs and users with FULL access to the account can delete it.
+
+
+##### Endpoints:
+
+`DELETE /settings/settingId`
+
+Example Request:
+```
+curl -X DELETE \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/AgA12vIwb:communication:email-H1gwe8WwFM
+```
+
+Example Response:
+
+```
+{
+    "meta": {
+        "status": "deleted"
+    }
+}
+```
+
+
+
+
+
+
 
 
 

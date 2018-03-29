@@ -34,6 +34,7 @@ User access to each endpoint is listed below:
 | GET /settings/communication/accountId ** | Y | Y | Y | N |
 | POST /settings/communication ** | Y | Y | N | N |
 | PATCH /settings/communication/settingId ** | Y | Y | N | N |
+| DELETE /settings/settingId ** | Y | Y | N | N |
 | POST /external-ids | Y | N | N | N |
 | GET /users/whoami | Y | Y | Y | Y |
 
@@ -42,6 +43,7 @@ User access to each endpoint is listed below:
 ** User role will limit the amount of data they can GET or POST/PATCH. For more information, consult the [Settings ReadMe](./Settings.md#).
 
 *** If user role is ADMIN, organisation-level events will also be returned.
+
 
 ## Get The Current User
 
