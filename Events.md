@@ -27,6 +27,7 @@ This endpoint allows you to collect events that you have access to.
 2. If you provide an accountId to an account you do not have at least ReadOnly access to, events from that account will not be returned.
 3. You can pull 2 types of events from this endpoint. `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see examples below.
 4. Some important Cloud Conformity activity-events are listed in the table below:
+
 | `event.attributes.name`  | Information |
 | ------------- | ------------- |
 | `organisation.acl.updated` | `attributes.extra` contains the details of what the target user's old and new access is. |
