@@ -1,8 +1,285 @@
-# Cloud Conformity Accounts API
+# Cloud Conformity Checks API
 
 Below is a list of the available APIs:
 
+- [Create Custom Checks](#create-custom-checks)
 - [List All Checks](#list-all-checks)
+- [Delete Check](#delete-check)
+
+
+
+## Create custom checks
+This endpoint is used to create a custom checks. You may pass one check or an array of checks in the JSON body.
+
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
+1. Checks are created as long as your inputs are valid. The onus is on you to ensure the checks you enter are meaningful and useful.
+3. Each check object you enter will require a `check.relationships.account`. If you provide an account which you don't have WRITE access to, the check will not be saved.
+2. Check Ids are constructed from the parameters entered and follow the format:
+    1. **ccc:accountId:ruleId:service:region:resourceId**
+    2. If you add a check with the same `accountId`, `ruleId`, `service`, `region`, AND `resourceId` as another existing check in the database, this new check WILL write over the existing check.
+    3. Since resource is an optional attribute, checks entered without resource will not have the `resourceId` part of the check Id.
+
+##### Endpoints:
+
+`POST /checks`
+
+##### Parameters
+- `data`: a data array (or data object if only creating one check) containing JSONAPI compliant objects with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+    - `message`: String, descriptive message about the check
+    - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
+    - `resource`: String, the AWS resource this check applies to. (optional)
+    - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
+    - `status`: String, SUCCESS or FAILURE
+    - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
+    - `service`: String, a valid AWS service, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
+    - `not-scored`: Boolean, true for informational checks (optional)
+    - `tags`: Array, an array of tag strings that follow the format: "key::value". You can enter a max of 20 tags, each tag must not exceed 50 characters. (optional)
+    - `extradata`: An array of objects (optional), each object must contain
+      - `label`: String, as it will appear on the client UI. Character limit of 20
+      - `name`: String, as reference for the back-end. Character limit of 20
+      - `type`: String, provide type as you see fit. Character limit of 20
+      - `value`: Enter value as you see fit. If entering a number or string, length must not exceed 150.
+  - `relationships`: A relationships object containing
+    - `account`: An account object containing
+      - `data`: A data object containing
+        - `id`: String, CloudConformity account id
+        - `type`: "accounts"
+    - `rule`: An rule object containing
+      - `data`: A data object containing
+        - `id`: "CUSTOM-001" 
+        - `type`: "rules"
+
+Example request for creating a check:
+
+```
+curl -X POST \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": [
+        {
+            "type": "checks",
+            "attributes": {
+                "extradata": [
+                    {
+                        "label": "This will show up on the UI",
+                        "name": "nameForReference",
+                        "type": "META",
+                        "value": "string or number or boolean"
+                    },
+                    {
+                        "label": "It is good to be descriptive",
+                        "name": "forReference",
+                        "type": "META",
+                        "value": "hello world!"
+                    }
+                ],
+                "message": "Descriptive message about this check",
+                "region": "us-west-2",
+                "resource": "sg-956d00ea",
+                "risk-level": "VERY_HIGH",
+                "status": "FAILURE",
+                "service": "EC2",
+                "categories": ["security"],
+                "tags": ["key0::value0", "key1::value1"]
+            },
+            "relationships": {
+                "account": {
+                    "data": {
+                        "id": "H19NxM15-",
+                        "type": "accounts"
+                    }
+                },
+                "rule": {
+                    "data": {
+                        "id": "CUSTOM-001",
+                        "type": "rules"
+                    }
+                }
+            },
+        },
+        {
+            "attributes": {
+                "extradata": [
+                    {
+                        "label": "Attachments",
+                        "name": "Attachments",
+                        "type": "META",
+                        "value": ""
+                    },
+                    {
+                        "label": "Description",
+                        "name": "Description",
+                        "type": "META",
+                        "value": "default VPC security group"
+                    },
+                    {
+                        "label": "Group Id",
+                        "name": "GroupId",
+                        "type": "META",
+                        "value": "sg-2e885d00"
+                    },
+                    {
+                        "label": "Group Name",
+                        "name": "GroupName",
+                        "type": "META",
+                        "value": "default"
+                    },
+                    {
+                        "label": "Vpc Id",
+                        "name": "VpcId",
+                        "type": "META",
+                        "value": "vpc-c7000fa3"
+                    }
+                ],
+                "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
+                "not-scored": false,
+                "region": "us-west-2",
+                "resource": "sg-2e885d00",
+                "risk-level": "VERY_HIGH",
+                "categories": ["security"],
+                "service": "EC2",
+                "status": "FAILURE"
+            },
+            "relationships": {
+                "account": {
+                    "data": {
+                        "id": "H19NxM15-",
+                        "type": "accounts"
+                    }
+                },
+                "rule": {
+                    "data": {
+                        "id": "CUSTOM-001",
+                        "type": "rules"
+                    }
+                }
+            },
+            "type": "checks"
+        }
+    ]
+}' \
+https://us-west-2-api.cloudconformity.com/v1/checks
+```
+Example Response:
+
+```
+{
+    "data": [
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea",
+            "attributes": {
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "message": "Descriptive message about this check",
+                "resource": "sg-956d00ea",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "This will show up on the UI",
+                        "name": "nameForReference",
+                        "type": "META",
+                        "value": "string or number or boolean"
+                    },
+                    {
+                        "label": "It is good to be descriptive",
+                        "name": "forReference",
+                        "type": "META",
+                        "value": "hello world!"
+                    }
+                ],
+                "tags": ["key0::value0", "key1::value1"]
+            },
+            "relationships": {
+                "rule": {
+                    "data": {
+                        "type": "rules",
+                        "id": "CUSTOM-001"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        },
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-2e885d00",
+            "attributes": {
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
+                "resource": "sg-2e885d48",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "Attachments",
+                        "name": "Attachments",
+                        "type": "META",
+                        "value": ""
+                    },
+                    {
+                        "label": "Description",
+                        "name": "Description",
+                        "type": "META",
+                        "value": "default VPC security group"
+                    },
+                    {
+                        "label": "Group Id",
+                        "name": "GroupId",
+                        "type": "META",
+                        "value": "sg-2e885d00"
+                    },
+                    {
+                        "label": "Group Name",
+                        "name": "GroupName",
+                        "type": "META",
+                        "value": "default"
+                    },
+                    {
+                        "label": "Vpc Id",
+                        "name": "VpcId",
+                        "type": "META",
+                        "value": "vpc-c7000fa3"
+                    }
+                ]
+            },
+            "relationships": {
+                "rule": {
+                    "data": {
+                        "type": "rules",
+                        "id": "CUSTOM-001"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
 
 
 ## List All Checks
@@ -113,4 +390,36 @@ Example Response:
     }
 }
 ```
+
+
+
+
+
+## Delete check
+
+A DELETE request to this endpoint allows a user with WRITE access to the associated account to delete the check.
+
+##### Endpoints:
+
+`DELETE /checks/checkId`
+
+Example Request:
+```
+curl -X DELETE \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea
+```
+
+Example Response:
+
+```
+{
+    "meta": [{
+        "status": "success",
+        "message": "Check successfully deleted"
+    }]
+}
+```
+
 

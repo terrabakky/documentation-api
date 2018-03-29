@@ -83,7 +83,9 @@ Below is a list of the available APIs:
 - [Accounts](./Accounts.md)
 - [API Keys](./APIKeys.md)
 - [Checks](./Checks.md)
+- [Events](./Events.md)
 - [External Ids](./ExternalId.md)
+- [Settings](./Settings.md)
 - [Users](./Users.md)
 
 ## Support
