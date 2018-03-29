@@ -26,6 +26,12 @@ This endpoint allows you to collect events that you have access to.
 1. If acountIds are not provided, events are returned from all accounts you have access to. If you are ADMIN, organisation-level events are also returned.
 2. If you provide an accountId to an account you do not have at least ReadOnly access to, events from that account will not be returned.
 3. You can pull 2 types of events from this endpoint. `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see examples below.
+4. Some important Cloud Conformity activity-events are listed in the table below:
+| `event.attributes.name`  | Information |
+| ------------- | ------------- |
+| `organisation.acl.updated` | `attributes.extra` contains the details of what the target user's old and new access is. |
+| `account.update.bot` | `attributes.extra` contains info about the old and new bot settings. |
+| `account.update.rule`| `attributes.extra` contains info about the old and new rule settings. |
 
 ##### Filtering
 The `filter` query parameter is reserved to be used as the basis for filtering. Any plural filter parameters (e.g. filter[region **s**]) accepts a comma-seperated list. E.g. `filter[regions]=us-east-1,us-east-2`
