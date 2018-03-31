@@ -22,12 +22,12 @@ Promise.mapSeries(events, function(event) {
 
 	var options = {
 		method: 'GET',
-	    uri: `${endpoint}/v1/events?${queryString}`,
-	    headers: {
-	    	"Content-Type": "application/vnd.api+json",
-	        'Authorization': `ApiKey ${APIKey}`
-	    },
-	    json: true
+		uri: `${endpoint}/v1/events?${queryString}`,
+		headers: {
+			"Content-Type": "application/vnd.api+json",
+			'Authorization': `ApiKey ${APIKey}`
+		},
+		json: true
 	};
 
 	return request(options).then((response) => response.data);

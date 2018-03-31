@@ -27,12 +27,12 @@ Promise.mapSeries(accounts, function(account) {
 
 	var options = {
 		method: 'POST',
-	    uri: `${endpoint}/v1/external-ids`,
-	    headers: {
-	    	"Content-Type": "application/vnd.api+json",
-	        'Authorization': `ApiKey ${APIKey}`
-	    },
-	    json: true
+		uri: `${endpoint}/v1/external-ids`,
+		headers: {
+			"Content-Type": "application/vnd.api+json",
+			'Authorization': `ApiKey ${APIKey}`
+		},
+		json: true
 	};
 
 	return request(options).then(function(xtl) {
@@ -105,26 +105,26 @@ Promise.mapSeries(accounts, function(account) {
 
 			var options = {
 				method: 'POST',
-			    uri: 'https://us-west-2-api.cloudconformity.com/v1/accounts',
-			    body: {
-			    	data: {
-			    		attributes: {
-			    			name: account.name,
-			    			environment: account.environment,
-			    			access: {
-			    				keys: {
-			    					externalId: externalId,
-			    					roleArn: roleArn
-			    				}
-			    			}
-			    		}
-			    	}
-			    },
-			    headers: {
-			    	"Content-Type": "application/vnd.api+json",
-			        'Authorization': `ApiKey ${APIKey}`
-			    },
-			    json: true
+				uri: 'https://us-west-2-api.cloudconformity.com/v1/accounts',
+				body: {
+					data: {
+						attributes: {
+							name: account.name,
+							environment: account.environment,
+							access: {
+								keys: {
+									externalId: externalId,
+									roleArn: roleArn
+								}
+							}
+						}
+					}
+				},
+				headers: {
+					"Content-Type": "application/vnd.api+json",
+					'Authorization': `ApiKey ${APIKey}`
+				},
+				json: true
 			};
 
 			return request(options);
