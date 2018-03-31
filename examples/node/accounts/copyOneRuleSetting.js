@@ -1,6 +1,9 @@
+// Copy one rule setting to another account
+
 const request = require('request-promise');
 
-// //Please substitute your own variables
+// Substitute value below
+let endpoint = "CLOUD_CONFORMITY_API_ENDPOINT";
 let APIKey = "YOUR_API_KEY";
 let fromAccountId = "YOUR_ACCOUNT_ID"; // Id of account you want to copy a rule FROM
 let toAccountId = "YOUR_SECOND_ACCOUNT_ID"; // Id of account you want to copy a rule TO
@@ -10,7 +13,7 @@ let note = "YOUR_NOTE"; // Note to add when patching a rule setting
 
 let options = {
 	method: 'GET',
-	uri: `https://us-west-2-api.cloudconformity.com/v1/accounts/${fromAccountId}/settings/rules/${ruleId}?notes=${wantsNotes}`,
+	uri: `${endpoint}/v1/accounts/${fromAccountId}/settings/rules/${ruleId}?notes=${wantsNotes}`,
 	headers: {
 		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
@@ -27,7 +30,7 @@ request(options).then(function(response) {
 	let patchOptions = {
 		method: 'PATCH',
 
-		uri: `https://us-west-2-api.cloudconformity.com/v1/accounts/${toAccountId}/settings/rules/${ruleId}`,
+		uri: `${endpoint}/v1/accounts/${toAccountId}/settings/rules/${ruleId}`,
 		headers: {
 			"Content-Type": "application/vnd.api+json",
 			'Authorization': `ApiKey ${APIKey}`

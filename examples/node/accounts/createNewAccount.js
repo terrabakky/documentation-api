@@ -1,9 +1,10 @@
+// Create an account
+
 const request = require('request-promise');
 
-
-// Please substitute YOUR_ENDPOINT, YOUR_API_KEY, YOUR_ACCOUNT_NAME, YOUR_ENVIRONMENT_NAME, YOUR_EXTERNAL_ID, and YOUR_ROLE_ARN
+// Substitute values below
 // For more information, refer to https://github.com/cloudconformity/documentation-api/blob/master/Accounts.md#create-an-account
-let Endpoint = "YOUR_ENDPOINT";
+let endpoint = "CLOUD_CONFORMITY_API_ENDPOINT";
 let APIKey = "YOUR_API_KEY";
 let account = {
 	name: "YOUR_ACCOUNT_NAME",
@@ -14,7 +15,7 @@ let roleArn = "YOUR_ROLE_ARN";
 
 let options = {
 	method: 'POST',
-	uri: `${Endpoint}`,
+	uri: `${endpoint}/v1/accounts`,
 	headers: {
 		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
