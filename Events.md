@@ -25,8 +25,8 @@ This endpoint allows you to collect events that you have access to.
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. If acountIds are not provided, events are returned from all accounts you have access to. If you are ADMIN, organisation-level events are also returned.
 2. If you provide an accountId to an account you do not have at least ReadOnly access to, events from that account will not be returned.
-3. You can pull 2 types of events from this endpoint. `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see examples below.
-4. All events have a name attribute. Some important Cloud Conformity events are listed in the [Event Names Table](#####event-names). <br />
+3. You can pull 2 types of events from this endpoint. `aws=true` will return **AWS events**; `cc=true` will return Cloud Conformity **activity-events**. For more information, see example below.
+4. All events have a name attribute. Some important Cloud Conformity events are listed in the [Event Names Table](#event-names). <br />
 Using the filter[name] as part of your query will get a history of that specific event. filter[name] also supports wildcards.
     1. Astericks at the end: `filter[name]=account.bot.update*` will get all events where the name starts with account.bot.update.
     2. Astericks in the middle:`filter[name]=account.*.update*` will match all account updating events like `account.bot.update` and `account.rule.update`.
@@ -96,7 +96,9 @@ Example Response:
 
 | `event.attributes.name`  | Information |
 | ------------- | ------------- |
-| `organisation.acl.updated` | `attributes.extra` contains the details of what the target user's old and new access is. |
+| AWS EVENTS|
+| `account.monitoring.activity` | All AWS events have this name |
+| ACCOUNT LEVEL|
 | `account.bot.update.delay.increased` | delay between automatic conformity bot run has been increased |
 | `account.bot.update.delay.decreased` | delay between automatic conformity bot run has been decreased |
 | `account.bot.update.disabled.until`| account bot was enabled and is now temporarily disabled until a set time. |
@@ -106,16 +108,18 @@ Example Response:
 | `account.bot.update.enabled.region` | some previously disabled regions are now enabled|
 | `account.rule.update.disabled` | some previously enabled rule is now disabled |
 | `account.rule.update.enabled` | some previously disabled rule is now enabled|
-| `account.rule.update.riskLevel` | rule risk level has beenchanged|
-| `account.rule.update.exceptions.tags.added` ||
-| `account.rule.update.exceptions.tags.removed` ||
-| `account.rule.update.exceptions.tags.updated` ||
-| `account.rule.update.exceptions.resources.added` ||
-| `account.rule.update.exceptions.resources.removed` ||
-| `account.rule.update.exceptions.resources.updated` ||
-| `account.rule.update.exceptions.tags.updated` ||
-| `account.rule.update.exceptions.tags.removed` ||
-| `account.rule.update.exceptions.tags.updated` ||
-| `account.rule.update.exceptions.tags.removed` ||
-| `account.rule.update.exceptions.tags.updated` ||
+| `account.rule.update.riskLevel` | rule risk level has been changed|
+| `account.rule.update.exceptions.tags.added` | There were no exception tags and now some have been added |
+| `account.rule.update.exceptions.tags.removed` | There were some exception tags and now all have been removed |
+| `account.rule.update.exceptions.tags.updated` | List of exception tags has been updated |
+| `account.rule.update.exceptions.resources.added` | There were no exception resources and now some have been added |
+| `account.rule.update.exceptions.resources.removed` | There were some exception resources and now all have been removed |
+| `account.rule.update.exceptions.resources.updated` | List of exception resources has been updated |
+| ORGANISATION LEVEL |
+| `organisation.acl.updated` | A user's role and/or account access settings has been changed.|
+| CHECKS RELATED |
+| `account.check.update.suppressed.until` | An account level check was temporarily suppressed until a set time. |
+| `account.check.update.suppressed` | An account level check was suppressed indefinitely. |
+| `account.check.update.unsuppressed` | An account level check has been unsuppressed indefinitely  |
+
 <br />
