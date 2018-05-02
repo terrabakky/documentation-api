@@ -64,8 +64,8 @@ The table below give more information about configuration options:
 
 | Channel  | Configuration |
 | ------------- | ------------- |
-| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
-| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
+| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
+| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
 | slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
@@ -391,7 +391,7 @@ A PATCH request to this endpoint allows you to update a specific communication s
         - `type`: `"organisations"`
         - `organisationId`: String, Cloud Conformity organisationId
     - `account`: Object containing
-      - `data`: *(`null` if only creating organisation-level setting)* Data object containing:
+      - `data`: *(`null` if updating to organisation-level setting)* Data object containing:
         - `type`: `"accounts"`,
         - `accountId`: String, Cloud Conformity accountId
 
@@ -415,8 +415,8 @@ The table below give more information about configuration options:
 
 | Channel  | Configuration |
 | ------------- | ------------- |
-| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at lease readOnly access to the account|
-| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at lease readOnly access to the account|
+| email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
+| sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
 | slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
