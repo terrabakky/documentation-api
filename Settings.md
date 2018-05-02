@@ -14,9 +14,9 @@ This feature can be used in conjunction with a GET request to copy communication
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. Settings are created as long as your inputs are valid. The onus is on you to ensure you don't create settings that are duplicate or too similar in nature.
-2. You can create either **account-level**-only OR **organisation-level**-only settings in each call.
-    1. If creating account-level settings you must provide ONLY the accountId and NOT the organisationId.
-    2. If creating organisation-level settings you must provide ONLY the organisationId and NOT the accountId.
+2. Each communication setting can be **account-level** OR **organisation-level**
+    1. If creating account-level setting, you must have valid `relationship.organisation` and `relationship.account` objects.
+    2. If creating organisation-level settings you must set `relationship.account.data: null`
     3. Only ADMIN users can create organisation-level settings.
     4. With organisation-level user-based (email & sms) settings, the onus is on you to ensure these users have at least read-only access to all accounts.
 
@@ -25,17 +25,18 @@ This feature can be used in conjunction with a GET request to copy communication
 `POST /settings/communication`
 
 ##### Parameters
-- `data`: An array object containing JSONAPI compliant data objects with following properties
+- `data`: An array containing JSONAPI compliant data objects with following properties
+  - `type`: `"settings"`,
   - `attributes`: An attribute object containing
-    - `type`: `"settings"`,
+    - `type`: `"communication"`,
     - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
     - `enabled`: Boolean, true for turning on, false for turning off this channel.
     - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
-  - `relationship`: A relationship object containing:
-    - `organisation`: Organisation object containing:
-      -`data`: Data object containing:
+  - `relationships`: A relationship object containing
+    - `organisation`: Organisation object containing
+      -`data`: Data object containing
         -`type`: `"organisations"`,
         -`organisationId`: String, Cloud Conformity organisationId
     - `account`: Organisation object containing:
@@ -78,25 +79,36 @@ curl -X POST \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
 -d '
 {
-  "data": {
+  "data": [{
+    "type": "settings",
     "attributes": {
-      "accountId": "H19NxM15-",
-      "communicationSettings": [
-        {
-          "enabled": true,
-           "filter": {
-                "riskLevels": ["EXTREME"],
-                "statuses": ["FAILURE"]
-           },
-            "configuration": {
-                "serviceName": "SomeName",
-                "serviceKey": "apagerdutyservicekey"
-            },
-            "channel": "pager-duty"
+      "type": "communication",
+      "enabled": true,
+      "filter": {
+        "riskLevels": ["EXTREME"],
+        "statuses": ["FAILURE"]
+      },
+      "configuration": {
+        "serviceName": "SomeName",
+        "serviceKey": "apagerdutyservicekey"
+      },
+      "channel": "pager-duty"
+    },
+    "relationships": {
+      "organisation": {
+        "data": {
+          "type": "organisations",
+          "id": "ryqMcJn4b"
         }
-      ]
-     }
-  }
+      },
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "H19NxM15-"
+        }
+      }
+    }
+  }]
 }' \
 https://us-west-2-api.cloudconformity.com/v1/settings/communication
 ```
@@ -364,15 +376,24 @@ A PATCH request to this endpoint allows you to update a specific communication s
 `PATCH /settings/communication/settingId`
 
 ##### Parameters
-- `data`: an JSON object containing JSONAPI compliant data object with following properties
+- `data`: An JSON object containing JSONAPI compliant data object with following properties
+  - `type`: `settings`,
   - `attributes`: An attribute object containing
-    - `accountId`: String, required if updating an account-level setting (Cloud Conformity accountId)
-    - `organisationId`: String, required if updating an organisation-level setting (Cloud Conformity organisationId)
-    - `channel`: String, must match channel in the settingId
+    - `type`: `"communication"`,
+    - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
     - `enabled`: Boolean, true for turning on, false for turning off this channel.
     - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
+  - `relationships`: A relationship object containing
+    - `organisation`: Organisation object containing
+      -`data`: Data object containing
+        -`type`: `"organisations"`,
+        -`organisationId`: String, Cloud Conformity organisationId
+    - `account`: Organisation object containing:
+      -`data`: *(`null` if only creating organisation-level setting)* Data object containing:
+        -`type`: `"accounts"`,
+        -`accountId`: String, Cloud Conformity accountId
 
 
 ##### Filtering
@@ -408,22 +429,40 @@ curl -X PATCH \
 -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
 -d '
-{
-  "data": {
-    "attributes": {
-      "accountId": "H19NxM15-",
-      "enabled": true,
-       "filter": {
-            "statuses": ["FAILURE"]
-       },
-        "configuration": {
-            "serviceName": "SomeOtherName",
-            "serviceKey": "anotherpagerdutyservicekey"
-        },
-        "channel": "pager-duty"
-     }
-  }
-}' \
+    {
+        "data": {
+            "type": "settings",
+            "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
+            "attributes": {
+                "type": "communication",
+                "enabled": true,
+                "filter": {
+                    "statuses": [
+                        "FAILURE"
+                    ]
+                },
+                "configuration": {
+                    "serviceName": "SomeOtherName",
+                    "serviceKey": "anotherpagerdutyservicekey"
+                },
+                "channel": "pager-duty"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    }' \
 https://us-west-2-api.cloudconformity.com/v1/settings/communication/H19NxM15-:communication:pager-duty-S1xvk1zGwM
 ```
 Example Response:
