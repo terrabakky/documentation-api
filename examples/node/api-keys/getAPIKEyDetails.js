@@ -1,12 +1,13 @@
 const request = require('request-promise');
 
-//Please substitute YOUR_ENDPOINT and YOUR_API_KEY
-let Endpoint = "YOUR_ENDPOINT";
+// Substitute values below
+let endpoint = "CLOUD_CONFORMITY_API_ENDPOINT";
 let APIKey = "YOUR_API_KEY";
+let APIKeyId = "YOU_KEY_ID";
 
 let options = {
-	method: 'POST',
-	uri: `${Endpoint}`,
+	method: 'GET',
+	uri: `${endpoint}/api-keys/${APIKeyId}`,
 	headers: {
 		"Content-Type": "application/vnd.api+json",
 		'Authorization': `ApiKey ${APIKey}`
@@ -19,4 +20,3 @@ request(options).then(function(response) {
 	console.log(JSON.stringify(response, null, 2));
 
 });
-

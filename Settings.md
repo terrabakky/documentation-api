@@ -169,7 +169,7 @@ This feature can be used in conjunction with a POST request to copy communicatio
 
 ##### Endpoints:
 
-`GET /settings/communication/accountId`
+`GET /settings/communication`
 
 ##### Parameters
 - `accountId`: The Cloud Conformity ID of the account

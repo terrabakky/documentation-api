@@ -1,9 +1,13 @@
+// Bulk account creation
+
 var request = require('request-promise');
 var Promise = require("bluebird");
 var AWS = require("aws-sdk");
 
-// IMPORTANT : Please contact us to acquire our AWS Account ID
-var cloudConformityAWSAccountId;
+// Substitute value below
+// IMPORTANT : Contact us to acquire our AWS Account ID
+var cloudConformityAWSAccountId = "12345678901234";
+let endpoint = "CLOUD_CONFORMITY_API_ENDPOINT";
 var APIKey = "YOUR_API_KEY";
 var templateURL = "https://s3-us-west-2.amazonaws.com/cloudconformity/CloudConformity.template";
 
@@ -23,12 +27,12 @@ Promise.mapSeries(accounts, function(account) {
 
 	var options = {
 		method: 'POST',
-	    uri: 'https://us-west-2-api.cloudconformity.com/v1/external-ids',
-	    headers: {
-	    	"Content-Type": "application/vnd.api+json",
-	        'Authorization': `ApiKey ${APIKey}`
-	    },
-	    json: true
+		uri: `${endpoint}/v1/external-ids`,
+		headers: {
+			"Content-Type": "application/vnd.api+json",
+			'Authorization': `ApiKey ${APIKey}`
+		},
+		json: true
 	};
 
 	return request(options).then(function(xtl) {
@@ -101,26 +105,26 @@ Promise.mapSeries(accounts, function(account) {
 
 			var options = {
 				method: 'POST',
-			    uri: 'https://us-west-2-api.cloudconformity.com/v1/accounts',
-			    body: {
-			    	data: {
-			    		attributes: {
-			    			name: account.name,
-			    			environment: account.environment,
-			    			access: {
-			    				keys: {
-			    					externalId: externalId,
-			    					roleArn: roleArn
-			    				}
-			    			}
-			    		}
-			    	}
-			    },
-			    headers: {
-			    	"Content-Type": "application/vnd.api+json",
-			        'Authorization': `ApiKey ${APIKey}`
-			    },
-			    json: true
+				uri: 'https://us-west-2-api.cloudconformity.com/v1/accounts',
+				body: {
+					data: {
+						attributes: {
+							name: account.name,
+							environment: account.environment,
+							access: {
+								keys: {
+									externalId: externalId,
+									roleArn: roleArn
+								}
+							}
+						}
+					}
+				},
+				headers: {
+					"Content-Type": "application/vnd.api+json",
+					'Authorization': `ApiKey ${APIKey}`
+				},
+				json: true
 			};
 
 			return request(options);
