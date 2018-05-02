@@ -429,40 +429,40 @@ curl -X PATCH \
 -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
 -d '
-    {
-        "data": {
-            "type": "settings",
-            "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
-            "attributes": {
-                "type": "communication",
-                "enabled": true,
-                "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ]
-                },
-                "configuration": {
-                    "serviceName": "SomeOtherName",
-                    "serviceKey": "anotherpagerdutyservicekey"
-                },
-                "channel": "pager-duty"
+{
+    "data": {
+        "type": "settings",
+        "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
+        "attributes": {
+            "type": "communication",
+            "enabled": true,
+            "filter": {
+                "statuses": [
+                    "FAILURE"
+                ]
             },
-            "relationships": {
-                "organisation": {
-                    "data": {
-                        "type": "organisations",
-                        "id": "ryqMcJn4b"
-                    }
-                },
-                "account": {
-                    "data": {
-                        "type": "accounts",
-                        "id": "H19NxM15-"
-                    }
+            "configuration": {
+                "serviceName": "SomeOtherName",
+                "serviceKey": "anotherpagerdutyservicekey"
+            },
+            "channel": "pager-duty"
+        },
+        "relationships": {
+            "organisation": {
+                "data": {
+                    "type": "organisations",
+                    "id": "ryqMcJn4b"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
                 }
             }
         }
-    }' \
+    }
+}' \
 https://us-west-2-api.cloudconformity.com/v1/settings/communication/H19NxM15-:communication:pager-duty-S1xvk1zGwM
 ```
 Example Response:
