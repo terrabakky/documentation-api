@@ -25,16 +25,23 @@ This feature can be used in conjunction with a GET request to copy communication
 `POST /settings/communication`
 
 ##### Parameters
-- `data`: an JSON object containing JSONAPI compliant data object with following properties
+- `data`: An array object containing JSONAPI compliant data objects with following properties
   - `attributes`: An attribute object containing
-    - `accountId`: String, required if creating an account-level setting (Cloud Conformity accountId)
-    - `organisationId`: String, required if creating an organisation-level setting (Cloud Conformity organisationId)
-    - `communicationSettings`: An array of objects, each object contains
-      - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
-      - `enabled`: Boolean, true for turning on, false for turning off this channel.
-      - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
-      - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
-      - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
+    - `type`: `"settings"`,
+    - `channel`: String, must be one of the following: email, sms, slack, pager-duty, sns
+    - `enabled`: Boolean, true for turning on, false for turning off this channel.
+    - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
+    - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
+    - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
+  - `relationship`: A relationship object containing:
+    - `organisation`: Organisation object containing:
+      -`data`: Data object containing:
+        -`type`: `"organisations"`,
+        -`organisationId`: String, Cloud Conformity organisationId
+    - `account`: Organisation object containing:
+      -`data`: *(`null` if only creating organisation-level setting)* Data object containing:
+        -`type`: `"accounts"`,
+        -`accountId`: String, Cloud Conformity accountId
 
 
 ##### Filtering
