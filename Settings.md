@@ -36,13 +36,13 @@ This feature can be used in conjunction with a GET request to copy communication
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
   - `relationships`: A relationship object containing
     - `organisation`: Organisation object containing
-      -`data`: Data object containing
-        -`type`: `"organisations"`,
-        -`organisationId`: String, Cloud Conformity organisationId
+      *-`data`: Data object containing
+        *-`type`: `"organisations"`,
+        *-`organisationId`: String, Cloud Conformity organisationId
     - `account`: Organisation object containing:
-      -`data`: *(`null` if only creating organisation-level setting)* Data object containing:
-        -`type`: `"accounts"`,
-        -`accountId`: String, Cloud Conformity accountId
+      *-`data`: *(`null` if only creating organisation-level setting)* Data object containing:
+        *-`type`: `"accounts"`,
+        *-`accountId`: String, Cloud Conformity accountId
 
 
 ##### Filtering
