@@ -54,7 +54,7 @@ The table below give more information about filter options:
 | `filter.services`  | An array of AWS service strings from the following: <br /> AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
 | `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
-| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
+| `filter.statuses`  | *(only used for SNS channels)* An array of statuses strings from the following: SUCCESS \| FAILURE |
 | `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
 
 
@@ -66,7 +66,7 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
+| slack  | ```{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }```  |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
@@ -405,7 +405,7 @@ The table below give more information about filter options:
 | `filter.services`  | An array of AWS service strings from the following: <br />AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
 | `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
-| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
+| `filter.statuses`  | *(only used for SNS channels)* An array of statuses strings from the following: SUCCESS \| FAILURE |
 | `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
 
 
