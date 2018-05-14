@@ -4,6 +4,7 @@ Below is a list of the available APIs:
 
 - [Create Custom Checks](#create-custom-checks)
 - [List All Checks](#list-all-checks)
+- [Get Check Details](#get-check-details)
 - [Delete Check](#delete-check)
 
 
@@ -32,6 +33,7 @@ This endpoint is used to create a custom checks. You may pass one check or an ar
     - `message`: String, descriptive message about the check
     - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
     - `resource`: String, the AWS resource this check applies to. (optional)
+    - `rule-title`: String, custom rule title. (optional, defaults to "Custom Rule" if not specified)
     - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
     - `status`: String, SUCCESS or FAILURE
     - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
@@ -179,6 +181,7 @@ Example Response:
                 "status": "FAILURE",
                 "risk-level": "VERY_HIGH",
                 "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
                 "message": "Descriptive message about this check",
                 "resource": "sg-956d00ea",
                 "last-modified-date": 1521660152755,
@@ -223,6 +226,7 @@ Example Response:
                 "status": "FAILURE",
                 "risk-level": "VERY_HIGH",
                 "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
                 "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
                 "resource": "sg-2e885d48",
                 "last-modified-date": 1521660152755,
@@ -387,6 +391,73 @@ Example Response:
     ],
     "meta": {
         "total-pages": 714
+    }
+}
+```
+
+
+
+## Get Check Details
+
+This endpoint allows you to get the details of the specified check.
+
+##### Endpoints:
+
+`GET /checks/id`
+
+##### Parameters
+- `id`: The Cloud Conformity ID of the check
+
+
+Example Request:
+
+```
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/checks/checks/ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test
+```
+Example Response:
+```
+{
+    "data": {
+        "type": "checks",
+        "id": "ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test",
+        "attributes": {
+            "region": "global",
+            "status": "FAILURE",
+            "risk-level": "LOW",
+            "pretty-risk-level": "High",
+            "message": "IAM Group test contains no user",
+            "last-modified-date": 1500166639466,
+            "created-date": 1500166639466
+            "last-updated-date": 1500166639466,
+            "failure-discovery-date": 1498910777689,
+            "last-updated-by": "SYSTEM",
+            "resolved-date": 1518409298274,
+            "resolved-by": null,
+            "ccrn": "ccrn:aws:r1gyR4cqg:IAM:global:groups-test",
+            "extradata": null,
+            "tags": [],
+            "cost": 0,
+            "waste": 0,
+            "not-scored": false,
+            "ignored": null,
+            "rule-title": "Password Policy Present"
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "IAM-017"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "r1gyR4cqg"
+                }
+            }
+        }
     }
 }
 ```
