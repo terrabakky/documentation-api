@@ -3,6 +3,7 @@
 Below is a list of the available APIs:
 
 - [Create Custom Checks](#create-custom-checks)
+- [Update Check](#update-check)
 - [List All Checks](#list-all-checks)
 - [Get Check Details](#get-check-details)
 - [Delete Check](#delete-check)
@@ -284,6 +285,227 @@ Example Response:
 }
 ```
 
+
+## Update check
+This endpoint is used to either update one custom check OR suppress/unsuppress one normal check.
+
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
+1. When updating an custom check, you must leave `region`, `resource`, `service` attributes and `relationship.account` and `relationship.rule` unchanged. These are unique identifier parameters for custom checks and must be always present and unchanged once check is created.
+
+##### Endpoints:
+
+`PATCH /checks/id`
+
+##### Parameters
+
+*The following parameters are for updating a custom check only* 
+- `data`: a data object containing JSONAPI compliant object with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+    - `message`: String, descriptive message about the check
+    - `region`: String, leave UNCHANGED
+    - `resource`: String, leave UNCHANGED (optional)
+    - `rule-title`: String, custom rule title. (optional, defaults to "Custom Rule" if not specified)
+    - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
+    - `status`: String, SUCCESS or FAILURE
+    - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
+    - `service`: String, leave UNCHANGED
+    - `not-scored`: Boolean, true for informational checks (optional)
+    - `tags`: Array, an array of tag strings that follow the format: "key::value". You can enter a max of 20 tags, each tag must not exceed 50 characters. (optional)
+    - `extradata`: An array of objects (optional), each object must contain
+      - `label`: String, as it will appear on the client UI. Character limit of 20
+      - `name`: String, as reference for the back-end. Character limit of 20
+      - `type`: String, provide type as you see fit. Character limit of 20
+      - `value`: Enter value as you see fit. If entering a number or string, length must not exceed 150.
+  - `relationships`: A relationships object containing
+    - `account`: An account object containing
+      - `data`: A data object containing
+        - `id`: String, leave UNCHANGED
+        - `type`: "accounts"
+    - `rule`: An rule object containing
+      - `data`: A data object containing
+        - `id`: String, leave UNCHANGED
+        - `type`: "rules"
+
+
+*The following parameters are for normal checks only*
+- `data`: a data object containing JSONAPI compliant object with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+      - `suppressed`: Boolean, true for suppressing the check
+      - `suppressed-until` Number, milliseconds between midnight of January 1, 1970 and the time when you want to suppress the check until. *Null if suppressing indefinitely*
+
+Example request for updating a custom check:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": {
+        "type": "checks",
+        "attributes": {
+            "region": "us-west-2",
+            "resource": "sg-956d00ea",
+            "risk-level": "VERY_HIGH",
+            "status": "FAILURE",
+            "service": "EC2",
+            "categories": ["security"],
+            "categories": ["security"],
+            "rule-title": "Custom Rule about EC2 SGs",
+            "message": "Updated message about this check",
+            "extradata": [
+                {
+                    "label": "This will show up on the UI",
+                    "name": "nameForReference",
+                    "type": "META",
+                    "value": "string or number or boolean"
+                },
+                {
+                    "label": "It is good to be descriptive",
+                    "name": "forReference",
+                    "type": "META",
+                    "value": "hello world!"
+                }
+            ],
+            "tags": ["key0::value0", "key1::value1"]
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "CUSTOM-001"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
+                }
+            }
+        }
+    }
+}' \
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea
+```
+Example Response:
+
+```
+{
+    "data": [
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea",
+            "attributes": {
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
+                "message": "Descriptive message about this check",
+                "resource": "sg-956d00ea",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "This will show up on the UI",
+                        "name": "nameForReference",
+                        "type": "META",
+                        "value": "string or number or boolean"
+                    },
+                    {
+                        "label": "It is good to be descriptive",
+                        "name": "forReference",
+                        "type": "META",
+                        "value": "hello world!"
+                    }
+                ],
+                "tags": ["key0::value0", "key1::value1"]
+            },
+            "relationships": {
+                "rule": {
+                    "data": {
+                        "type": "rules",
+                        "id": "CUSTOM-001"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        },
+        {
+            "type": "checks",
+            "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-2e885d00",
+            "attributes": {
+                "region": "us-west-2",
+                "status": "FAILURE",
+                "risk-level": "VERY_HIGH",
+                "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
+                "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
+                "resource": "sg-2e885d48",
+                "last-modified-date": 1521660152755,
+                "created-date": 1521660152755,
+                "failure-discovery-date": 1521660152755,
+                "extradata": [
+                    {
+                        "label": "Attachments",
+                        "name": "Attachments",
+                        "type": "META",
+                        "value": ""
+                    },
+                    {
+                        "label": "Description",
+                        "name": "Description",
+                        "type": "META",
+                        "value": "default VPC security group"
+                    },
+                    {
+                        "label": "Group Id",
+                        "name": "GroupId",
+                        "type": "META",
+                        "value": "sg-2e885d00"
+                    },
+                    {
+                        "label": "Group Name",
+                        "name": "GroupName",
+                        "type": "META",
+                        "value": "default"
+                    },
+                    {
+                        "label": "Vpc Id",
+                        "name": "VpcId",
+                        "type": "META",
+                        "value": "vpc-c7000fa3"
+                    }
+                ]
+            },
+            "relationships": {
+                "rule": {
+                    "data": {
+                        "type": "rules",
+                        "id": "CUSTOM-001"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
 
 
 ## List All Checks
