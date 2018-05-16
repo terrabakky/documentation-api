@@ -66,10 +66,10 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br /> 
-`"channel": "#your-channel",` <br /> 
-`displayIntroducedBy: false,` <br /> 
-`displayResource: false,` <br /> 
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br> 
+`"channel": "#your-channel",` <br> 
+`displayIntroducedBy: false,` <br> 
+`displayResource: false,` <br> 
 `displayTags: false` }  |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
