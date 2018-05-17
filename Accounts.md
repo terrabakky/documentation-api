@@ -20,8 +20,8 @@ This endpoint is used to register a new AWS account with Cloud Conformity.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;In order to register a new AWS account, you need to:
-1. Obtain an External Id from [Create an External Id](./ExternalId.md#create-an-external-id) (**Note:** External Ids expire after 1 hour.)
-2. Configure your account using CloudFormation automation (**Note:** You need to specify **`ExternalId`** parameter for both options)
+1. Obtain your External ID from [Get Organisation External ID](./ExternalId.md#get-organisation-external-id)
+2. Configure your account using CloudFormation automation (**Note:** You need to specify **`ExternalID`** parameter for both options)
    1. Option 1 Launch stack via the console:
 
       [![API Keys](images/cloudformation-launch-stack.png)](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https:%2F%2Fs3-us-west-2.amazonaws.com%2Fcloudconformity%2FCloudConformity.template&stackName=CloudConformity&param_AccountId=717210094962&param_ExternalId=THE_EXTERNAL_ID)
