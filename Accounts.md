@@ -5,6 +5,7 @@ Below is a list of the available API calls:
 - [Create An Account](#create-an-account)
 - [List All Accounts](#list-all-accounts)
 - [Get Account Details](#get-account-details)
+- [Get Account Access Setting](#get-account-access-setting)
 - [Scan Account](#scan-account)
 - [Update Account Subscription](#update-account-subscription)
 - [Update Account](#update-account)
@@ -218,7 +219,7 @@ Example Request:
 ```
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/accounts/BJ0Ox16Hb
+https://us-west-2-api.cloudconformity.com/v1/accounts/ABA95vIw8
 ```
 Example Response:
 ```
@@ -315,6 +316,57 @@ Example Response:
     ]
 }
 ```
+
+## Get Account Access Setting
+
+This endpoint allows ADMIN users to get the current setting Cloud Conformity uses to access the specified account
+
+##### Endpoints:
+
+`GET  /accounts/id/access`
+
+##### Parameters
+- `id`: The Cloud Conformity ID of the account
+
+
+Example Request:
+
+```
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/accounts/BJ0Ox16Hb/access
+```
+Example Response:
+```
+{
+    "id": "BJ0Ox16Hb:access",
+    "type": "settings",
+    "attributes": {
+        "type": "access",
+        "configuration": {
+            "externalId": "XTLFTLAXVS7G",
+            "roleArn": "arn:aws:iam::222274792222:role/myRole"
+        }
+    },
+    "relationships": {
+        "organisation": {
+            "data": {
+                "type": "organisations",
+                "id": "A1iUY1pz3"
+            }
+        },
+        "account": {
+            "data": {
+                "type": "accounts",
+                "id": "BJ0Ox16Hb"
+            }
+        }
+    }
+}
+
+```
+
+
 
 ## Scan Account
 
