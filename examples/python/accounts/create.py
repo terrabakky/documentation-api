@@ -5,6 +5,8 @@ import json
 # Please substitute YOUR_ENDPOINT, YOUR_API_KEY, YOUR_ACCOUNT_NAME, YOUR_ENVIRONMENT_NAME, YOUR_EXTERNAL_ID, and YOUR_ROLE_ARN
 # For more information, refer to https://github.com/cloudconformity/documentation-api/blob/master/Accounts.md#create-an-account
 endpoint = 'YOUR_ENDPOINT'
+url = endpoint + '/v1/accounts'
+
 headers = {
 	'Content-Type': 'application/vnd.api+json',
 	'Authorization': 'ApiKey YOUR_API_KEY'
@@ -33,6 +35,6 @@ payload =  {
 	}
 }
 
-resp = requests.post(endpoint, headers=headers, data=json.dumps(payload))
+resp = requests.post(url, headers=headers, data=json.dumps(payload))
 
 print json.dumps(resp.json(), indent=4, sort_keys=True)
