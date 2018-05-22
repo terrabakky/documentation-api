@@ -188,6 +188,7 @@ Example Response:
                 "last-modified-date": 1521660152755,
                 "created-date": 1521660152755,
                 "failure-discovery-date": 1521660152755,
+                "categories": ["security"],
                 "extradata": [
                     {
                         "label": "This will show up on the UI",
@@ -233,6 +234,7 @@ Example Response:
                 "last-modified-date": 1521660152755,
                 "created-date": 1521660152755,
                 "failure-discovery-date": 1521660152755,
+                "categories": ["security"],
                 "extradata": [
                     {
                         "label": "Attachments",
@@ -335,8 +337,10 @@ This endpoint is used to either update one custom check OR suppress/unsuppress o
 - `data`: a data object containing JSONAPI compliant object with following properties
   - `type`: "checks"
   - `attributes`: An attributes object containing
-      - `suppressed`: Boolean, true for suppressing the check
-      - `suppressed-until` Number, milliseconds between midnight of January 1, 1970 and the time when you want to suppress the check until. *Null if suppressing indefinitely*
+    - `suppressed`: Boolean, true for suppressing the check
+    - `suppressed-until` Number, milliseconds between midnight of January 1, 1970 and the time when you want to suppress the check until. *Null if suppressing indefinitely*
+    - `note`: String *(optional)*, a message regarding the reason for this check suppression update.
+
 
 Example request for updating a custom check:
 
@@ -459,6 +463,7 @@ curl -X PATCH \
         "attributes": {
             "suppressed": true,
             "suppressed-until": 1526574705655
+            "note": "suppressed for 1 week, failure not-applicable during project xyz"
         }
     }
 }; \
