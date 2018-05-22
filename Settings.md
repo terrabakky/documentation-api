@@ -449,11 +449,6 @@ A PATCH request to this endpoint allows you to update a specific communication s
     - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
-  - `relationships`: Object containing
-    - `account`: Object containing
-      - `data`: *(`null` if updating to organisation-level setting)* Data object containing:
-        - `type`: `"accounts"`,
-        - `accountId`: String, Cloud Conformity accountId
 
 
 ##### Filtering
@@ -505,20 +500,6 @@ curl -X PATCH \
                 "serviceKey": "anotherpagerdutyservicekey"
             },
             "channel": "pager-duty"
-        },
-        "relationships": {
-            "organisation": {
-                "data": {
-                    "type": "organisations",
-                    "id": "ryqMcJn4b"
-                }
-            },
-            "account": {
-                "data": {
-                    "type": "accounts",
-                    "id": "H19NxM15-"
-                }
-            }
         }
     }
 }' \
