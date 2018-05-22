@@ -355,7 +355,7 @@ This endpoint allows you to get the details of the specified communication setti
 
 ##### Endpoints:
 
-`GET /settings/communication/id`
+`GET /settings/id`
 
 ##### Parameters
 - `id`: The Cloud Conformity ID of the communication setting
@@ -378,7 +378,7 @@ Example Request:
 ```
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/settings/communication/ryqs8LNKW:communication:email-Ske1cKKEvM
+https://us-west-2-api.cloudconformity.com/v1/settings/ryqs8LNKW:communication:email-Ske1cKKEvM
 ```
 Example Response:
 ```
