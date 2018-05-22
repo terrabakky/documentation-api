@@ -4,6 +4,7 @@ Below is a list of the available API calls:
 
 - [Create Communication Settings](#create-communication-settings)
 - [Get Communication Settings](#get-communication-settings)
+- [Get Communication Setting Details](#get-communication-setting-details)
 - [Update Communication Setting](#update-communication-setting)
 - [Delete Communication Setting](#delete-communication-setting)
 
@@ -15,7 +16,7 @@ This feature can be used in conjunction with a GET request to copy communication
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. Settings are created as long as your inputs are valid. The onus is on you to ensure you don't create settings that are duplicate or too similar in nature.
 2. Each communication setting can be **account-level** OR **organisation-level**
-    1. If creating account-level setting, you must have valid `relationship.organisation` and `relationship.account` objects.
+    1. If creating account-level setting, you must have a valid `relationship.account` object.
     2. If creating organisation-level settings you must set `relationship.account.data: null`
     3. Only ADMIN users can create organisation-level settings.
     4. With organisation-level user-based (email & sms) settings, the onus is on you to ensure these users have at least read-only access to all accounts.
@@ -35,10 +36,6 @@ This feature can be used in conjunction with a GET request to copy communication
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
   - `relationships`: Object containing
-    - `organisation`: Object containing
-        - `data`: Object containing
-        - `type`: `"organisations"`
-        - `organisationId`: String, Cloud Conformity organisationId
     - `account`: Object containing
       - `data`: *(`null` if only creating organisation-level setting)* Data object containing:
         - `type`: `"accounts"`,
@@ -66,7 +63,7 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`displayResource: false,` Boolean, true for adding resource to message<br>`displayTags: false}` Boolean, true for adding associated tags to message   |
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`"displayResource": false,` Boolean, true for adding resource to message<br>`"displayTags": false}` Boolean, true for adding associated tags to message   |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
@@ -95,12 +92,6 @@ curl -X POST \
       "channel": "pager-duty"
     },
     "relationships": {
-      "organisation": {
-        "data": {
-          "type": "organisations",
-          "id": "ryqMcJn4b"
-        }
-      },
       "account": {
         "data": {
           "type": "accounts",
@@ -359,6 +350,79 @@ Example response for a user with FULL access to the acount:
 
 
 
+## Get Communication Setting Details
+This endpoint allows you to get the details of the specified communication setting.
+
+##### Endpoints:
+
+`GET /settings/communication/id`
+
+##### Parameters
+- `id`: The Cloud Conformity ID of the communication setting
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
+
+| Role | Organisation-Level Settings | Account-Level Settings |
+| ---- | ---- | ---- |
+| ADMIN | Full setting with configurations | Full settings with configuration |
+| FULL access to the account | Setting without configurations | Full setting with configurations |
+| READONLY access to the account |  No setting | Setting without configurations | 
+| NO access to the account |  No setting  | No setting |
+
+
+
+
+Example Request:
+
+```
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication/ryqs8LNKW:communication:email-Ske1cKKEvM
+```
+Example Response:
+```
+{
+    "data": {
+        "type": "settings",
+        "id": "ryqs8LNKW:communication:email-Ske1cKKEvM",
+        "attributes": {
+            "type": "communication",
+            "manual": false,
+            "enabled": true,
+            "filter": {
+                "statuses": [
+                    "FAILURE"
+                ],
+                "categories": [
+                    "security"
+                ],
+                "suppressed": false
+            },
+            "configuration": {
+                "users": [
+                    "HyL7K6GrZ"
+                ]
+            },
+            "channel": "email"
+        },
+        "relationships": {
+            "organisation": {
+                "data": {
+                    "type": "organisations",
+                    "id": "ryqMcJn4b"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
+                }
+            }
+        }
+    }
+}
+```
 
 
 
@@ -386,10 +450,6 @@ A PATCH request to this endpoint allows you to update a specific communication s
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
   - `relationships`: Object containing
-    - `organisation`: Object containing
-      -`data`: Object containing
-        - `type`: `"organisations"`
-        - `organisationId`: String, Cloud Conformity organisationId
     - `account`: Object containing
       - `data`: *(`null` if updating to organisation-level setting)* Data object containing:
         - `type`: `"accounts"`,
@@ -417,7 +477,7 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`displayResource: false,` Boolean, true for adding resource to message<br>`displayTags: false}` Boolean, true for adding associated tags to message   |
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`"displayResource": false,` Boolean, true for adding resource to message<br>`"displayTags": false}` Boolean, true for adding associated tags to message   |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
@@ -432,7 +492,6 @@ curl -X PATCH \
 {
     "data": {
         "type": "settings",
-        "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
         "attributes": {
             "type": "communication",
             "enabled": true,
