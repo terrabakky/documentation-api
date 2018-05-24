@@ -82,8 +82,7 @@ curl -X POST \
       "type": "communication",
       "enabled": true,
       "filter": {
-        "riskLevels": ["EXTREME"],
-        "statuses": ["FAILURE"]
+        "riskLevels": ["EXTREME"]
       },
       "configuration": {
         "serviceName": "SomeName",
@@ -118,9 +117,6 @@ Example Response:
                 "filter": {
                     "riskLevels": [
                         "EXTREME"
-                    ],
-                    "statuses": [
-                        "FAILURE"
                     ]
                 },
                 "configuration": {
@@ -201,9 +197,6 @@ Example Response for an ADMIN user:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "services": [
                         "Organizations"
                     ],
@@ -236,9 +229,6 @@ Example Response for an ADMIN user:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "categories": [
                         "security"
                     ],
@@ -284,9 +274,6 @@ Example response for a user with FULL access to the acount:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "services": [
                         "Organizations"
                     ],
@@ -314,9 +301,6 @@ Example response for a user with FULL access to the acount:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "categories": [
                         "security"
                     ],
@@ -391,9 +375,6 @@ Example Response:
             "manual": false,
             "enabled": true,
             "filter": {
-                "statuses": [
-                    "FAILURE"
-                ],
                 "categories": [
                     "security"
                 ],
@@ -490,11 +471,6 @@ curl -X PATCH \
         "attributes": {
             "type": "communication",
             "enabled": true,
-            "filter": {
-                "statuses": [
-                    "FAILURE"
-                ]
-            },
             "configuration": {
                 "serviceName": "SomeOtherName",
                 "serviceKey": "anotherpagerdutyservicekey"
@@ -517,11 +493,6 @@ Example Response:
                 "type": "communication",
                 "manual": "",
                 "enabled": true,
-                "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ]
-                },
                 "configuration": {
                     "serviceName": "SomeOtherName",
                     "serviceKey": "anotherpagerdutyservicekey"
