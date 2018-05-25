@@ -20,6 +20,7 @@ This end point takes no parameters.
 Example Request: 
 
 ```
+
 curl -X GET \
 -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
