@@ -150,7 +150,7 @@ Example Response:
 
 ## Get Communication Settings
 
-A GET request to this endpoint allows you to get communication settings of the specified account.
+A GET request to this endpoint allows you to get communication settings.
 This feature can be used in conjunction with a POST request to copy communication settings from one account to others. An example of this function is provided in the examples folder.
 
 
@@ -159,8 +159,9 @@ This feature can be used in conjunction with a POST request to copy communicatio
 `GET /settings/communication`
 
 ##### Parameters
-- `accountId`: The Cloud Conformity ID of the account
-- `channel`: Optional parameter if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
+- `channel`: *optional* Provide if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
+- `accountId`: *optional* Cloud Conformity ID of the account. Provide to get only settings set for the specified account.
+- `includeParents`: *optional* (true|false) Can only be used in conjunction with the accountId parameter. Specify `true` if you want to see both account level settings and organisation level settings.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
@@ -181,7 +182,7 @@ Example request for email-only settings:
 
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email&includeParents=true
 ```
 
 Example Response for an ADMIN user:
@@ -260,7 +261,6 @@ Example Response for an ADMIN user:
 }
 ```
 
-
 Example response for a user with FULL access to the acount:
 (**Note:** Organisation-level setting's configuration is not shown to this user)
 ```
@@ -293,6 +293,109 @@ Example response for a user with FULL access to the acount:
                 }
             }
         },
+        {
+            "type": "settings",
+            "id": "ryqs8LNKW:communication:email-Ske1cKKEvM",
+            "attributes": {
+                "type": "communication",
+                "manual": false,
+                "enabled": true,
+                "filter": {
+                    "categories": [
+                        "security"
+                    ],
+                    "suppressed": false
+                },
+                "configuration": {
+                    "users": [
+                        "HyL7K6GrZ"
+                    ]
+                },
+                "channel": "email"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
+Example request for **organisation-level** email-only settings:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?channel=email
+```
+
+Example Response for an ADMIN user:
+```
+{
+    "data": [
+        {
+            "type": "settings",
+            "id": "communication:email-HJgeFWmpVf",
+            "attributes": {
+                "type": "communication",
+                "manual": false,
+                "enabled": true,
+                "filter": {
+                    "services": [
+                        "Organizations"
+                    ],
+                    "suppressed": false
+                },
+                "configuration": {
+                    "users": [
+                        "BJlqMqknVb"
+                    ]
+                },
+                "channel": "email"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": null
+                }
+            }
+        }
+    ]
+}
+```
+
+
+Example request for **account-level** email-only settings:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email
+```
+
+Example Response for an ADMIN user:
+(**Note:** Without the `includeParents` parameter, no organisation-level settings are shown.)
+```
+{
+    "data": [
         {
             "type": "settings",
             "id": "ryqs8LNKW:communication:email-Ske1cKKEvM",
