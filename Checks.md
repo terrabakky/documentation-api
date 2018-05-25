@@ -339,7 +339,8 @@ This endpoint is used to either update one custom check OR suppress/unsuppress o
   - `attributes`: An attributes object containing
     - `suppressed`: Boolean, true for suppressing the check
     - `suppressed-until` Number, milliseconds between midnight of January 1, 1970 and the time when you want to suppress the check until. *Null if suppressing indefinitely*
-    - `note`: String *(optional)*, a message regarding the reason for this check suppression update.
+- `meta`: a data object containing
+  - `note`: String, a message regarding the reason for this check suppression update.
 
 
 Example request for updating a custom check:
@@ -463,8 +464,11 @@ curl -X PATCH \
         "attributes": {
             "suppressed": true,
             "suppressed-until": 1526574705655
-            "note": "suppressed for 1 week, failure not-applicable during project xyz"
         }
+    }
+    "meta": {
+        "note": "suppressed for 1 week, failure not-applicable during project xyz"
+
     }
 }; \
 
