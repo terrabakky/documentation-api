@@ -12,7 +12,7 @@ This endpoint allows you to get your organisation's external ID.
 
 ##### Endpoints: 
 
-`POST /organisation/external-id`. *note: singleton resource*
+`GET /organisation/external-id`. *note: singleton resource*
 
 ##### Parameters
 This end point takes no parameters.
@@ -20,7 +20,7 @@ This end point takes no parameters.
 Example Request: 
 
 ```
-curl -X POST \
+curl -X GET \
 -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
 https://us-west-2-api.cloudconformity.com/v1/organisation/external-id
@@ -70,7 +70,7 @@ Example Response:
 {
     "data": {
         "type": "external-ids",
-        "id": "77923950-9ab1-11e7-9ebb-4794edfe32bf",
+        "id": "aaaaaaaa-bbbb-zzzz-dddd-eeeeeeffffff",
         "attributes": {
             "valid-until": 1505550866404
         },
@@ -78,7 +78,7 @@ Example Response:
     }
 }
 ```
-You need data.id (`77923950-9ab1-11e7-9ebb-4794edfe32bf`) for registering a new account.
+You need data.id (`aaaaaaaa-bbbb-zzzz-dddd-eeeeeeffffff`) for registering a new account.
 
 IMPORTANT:  
 > For security reasons, External IDs created via the API are only valid for one hour. If you do not use it to create an account within the hour, you must generate a new external ID and start over.
