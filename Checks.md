@@ -465,7 +465,7 @@ curl -X PATCH \
             "suppressed": true,
             "suppressed-until": 1526574705655
         }
-    }
+    },
     "meta": {
         "note": "suppressed for 1 week, failure not-applicable during project xyz"
 
