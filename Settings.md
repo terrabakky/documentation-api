@@ -4,6 +4,7 @@ Below is a list of the available API calls:
 
 - [Create Communication Settings](#create-communication-settings)
 - [Get Communication Settings](#get-communication-settings)
+- [Get Communication Setting Details](#get-communication-setting-details)
 - [Update Communication Setting](#update-communication-setting)
 - [Delete Communication Setting](#delete-communication-setting)
 
@@ -15,7 +16,7 @@ This feature can be used in conjunction with a GET request to copy communication
 &nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
 1. Settings are created as long as your inputs are valid. The onus is on you to ensure you don't create settings that are duplicate or too similar in nature.
 2. Each communication setting can be **account-level** OR **organisation-level**
-    1. If creating account-level setting, you must have valid `relationship.organisation` and `relationship.account` objects.
+    1. If creating account-level setting, you must have a valid `relationship.account` object.
     2. If creating organisation-level settings you must set `relationship.account.data: null`
     3. Only ADMIN users can create organisation-level settings.
     4. With organisation-level user-based (email & sms) settings, the onus is on you to ensure these users have at least read-only access to all accounts.
@@ -35,10 +36,6 @@ This feature can be used in conjunction with a GET request to copy communication
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
   - `relationships`: Object containing
-    - `organisation`: Object containing
-        - `data`: Object containing
-        - `type`: `"organisations"`
-        - `organisationId`: String, Cloud Conformity organisationId
     - `account`: Object containing
       - `data`: *(`null` if only creating organisation-level setting)* Data object containing:
         - `type`: `"accounts"`,
@@ -54,7 +51,7 @@ The table below give more information about filter options:
 | `filter.services`  | An array of AWS service strings from the following: <br /> AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
 | `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
-| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
+| `filter.statuses`  | *(only used for SNS channels)* An array of statuses strings from the following: SUCCESS \| FAILURE |
 | `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
 
 
@@ -66,7 +63,7 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`"displayResource": false,` Boolean, true for adding resource to message<br>`"displayTags": false}` Boolean, true for adding associated tags to message   |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
@@ -85,8 +82,7 @@ curl -X POST \
       "type": "communication",
       "enabled": true,
       "filter": {
-        "riskLevels": ["EXTREME"],
-        "statuses": ["FAILURE"]
+        "riskLevels": ["EXTREME"]
       },
       "configuration": {
         "serviceName": "SomeName",
@@ -95,12 +91,6 @@ curl -X POST \
       "channel": "pager-duty"
     },
     "relationships": {
-      "organisation": {
-        "data": {
-          "type": "organisations",
-          "id": "ryqMcJn4b"
-        }
-      },
       "account": {
         "data": {
           "type": "accounts",
@@ -127,9 +117,6 @@ Example Response:
                 "filter": {
                     "riskLevels": [
                         "EXTREME"
-                    ],
-                    "statuses": [
-                        "FAILURE"
                     ]
                 },
                 "configuration": {
@@ -163,7 +150,7 @@ Example Response:
 
 ## Get Communication Settings
 
-A GET request to this endpoint allows you to get communication settings of the specified account.
+A GET request to this endpoint allows you to get communication settings.
 This feature can be used in conjunction with a POST request to copy communication settings from one account to others. An example of this function is provided in the examples folder.
 
 
@@ -172,8 +159,9 @@ This feature can be used in conjunction with a POST request to copy communicatio
 `GET /settings/communication`
 
 ##### Parameters
-- `accountId`: The Cloud Conformity ID of the account
-- `channel`: Optional parameter if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
+- `channel`: *optional* Provide if you want to only get settings for one specific channel: email, sms, slack, pager-duty, or sns.
+- `accountId`: *optional* Cloud Conformity ID of the account. Provide to get only settings set for the specified account.
+- `includeParents`: *optional* (true|false) Can only be used in conjunction with the accountId parameter. Specify `true` if you want to see both account level settings and organisation level settings.
 
 **IMPORTANT:**
 &nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
@@ -194,7 +182,7 @@ Example request for email-only settings:
 
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email&includeParents=true
 ```
 
 Example Response for an ADMIN user:
@@ -210,9 +198,6 @@ Example Response for an ADMIN user:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "services": [
                         "Organizations"
                     ],
@@ -245,9 +230,6 @@ Example Response for an ADMIN user:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "categories": [
                         "security"
                     ],
@@ -279,7 +261,6 @@ Example Response for an ADMIN user:
 }
 ```
 
-
 Example response for a user with FULL access to the acount:
 (**Note:** Organisation-level setting's configuration is not shown to this user)
 ```
@@ -293,9 +274,6 @@ Example response for a user with FULL access to the acount:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ],
                     "services": [
                         "Organizations"
                     ],
@@ -323,9 +301,109 @@ Example response for a user with FULL access to the acount:
                 "manual": false,
                 "enabled": true,
                 "filter": {
-                    "statuses": [
-                        "FAILURE"
+                    "categories": [
+                        "security"
                     ],
+                    "suppressed": false
+                },
+                "configuration": {
+                    "users": [
+                        "HyL7K6GrZ"
+                    ]
+                },
+                "channel": "email"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": {
+                        "type": "accounts",
+                        "id": "H19NxM15-"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
+Example request for **organisation-level** email-only settings:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?channel=email
+```
+
+Example Response for an ADMIN user:
+```
+{
+    "data": [
+        {
+            "type": "settings",
+            "id": "communication:email-HJgeFWmpVf",
+            "attributes": {
+                "type": "communication",
+                "manual": false,
+                "enabled": true,
+                "filter": {
+                    "services": [
+                        "Organizations"
+                    ],
+                    "suppressed": false
+                },
+                "configuration": {
+                    "users": [
+                        "BJlqMqknVb"
+                    ]
+                },
+                "channel": "email"
+            },
+            "relationships": {
+                "organisation": {
+                    "data": {
+                        "type": "organisations",
+                        "id": "ryqMcJn4b"
+                    }
+                },
+                "account": {
+                    "data": null
+                }
+            }
+        }
+    ]
+}
+```
+
+
+Example request for **account-level** email-only settings:
+
+```
+
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/communication?accountId=H19NxM15-&channel=email
+```
+
+Example Response for an ADMIN user:
+(**Note:** Without the `includeParents` parameter, no organisation-level settings are shown.)
+```
+{
+    "data": [
+        {
+            "type": "settings",
+            "id": "ryqs8LNKW:communication:email-Ske1cKKEvM",
+            "attributes": {
+                "type": "communication",
+                "manual": false,
+                "enabled": true,
+                "filter": {
                     "categories": [
                         "security"
                     ],
@@ -359,6 +437,76 @@ Example response for a user with FULL access to the acount:
 
 
 
+## Get Communication Setting Details
+This endpoint allows you to get the details of the specified communication setting.
+
+##### Endpoints:
+
+`GET /settings/id`
+
+##### Parameters
+- `id`: The Cloud Conformity ID of the communication setting
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Users with different roles can get different results from this endpoint. The table below describes the relationship between user role and type of data you get get.
+
+| Role | Organisation-Level Settings | Account-Level Settings |
+| ---- | ---- | ---- |
+| ADMIN | Full setting with configurations | Full settings with configuration |
+| FULL access to the account | Setting without configurations | Full setting with configurations |
+| READONLY access to the account |  No setting | Setting without configurations | 
+| NO access to the account |  No setting  | No setting |
+
+
+
+
+Example Request:
+
+```
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/settings/ryqs8LNKW:communication:email-Ske1cKKEvM
+```
+Example Response:
+```
+{
+    "data": {
+        "type": "settings",
+        "id": "ryqs8LNKW:communication:email-Ske1cKKEvM",
+        "attributes": {
+            "type": "communication",
+            "manual": false,
+            "enabled": true,
+            "filter": {
+                "categories": [
+                    "security"
+                ],
+                "suppressed": false
+            },
+            "configuration": {
+                "users": [
+                    "HyL7K6GrZ"
+                ]
+            },
+            "channel": "email"
+        },
+        "relationships": {
+            "organisation": {
+                "data": {
+                    "type": "organisations",
+                    "id": "ryqMcJn4b"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
+                }
+            }
+        }
+    }
+}
+```
 
 
 
@@ -385,15 +533,6 @@ A PATCH request to this endpoint allows you to update a specific communication s
     - `manual`: Boolean, *(only used for SNS channels)* true for allowing users to manually send individual checks, false for disabling this option.
     - `filter`: Optional object (defines which checks you want to be included) including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
     - `configuration`: Object containing parameters that are different for each channel. For more details consult the [configurations-table](#configuration)
-  - `relationships`: Object containing
-    - `organisation`: Object containing
-      -`data`: Object containing
-        - `type`: `"organisations"`
-        - `organisationId`: String, Cloud Conformity organisationId
-    - `account`: Object containing
-      - `data`: *(`null` if updating to organisation-level setting)* Data object containing:
-        - `type`: `"accounts"`,
-        - `accountId`: String, Cloud Conformity accountId
 
 
 ##### Filtering
@@ -405,7 +544,7 @@ The table below give more information about filter options:
 | `filter.services`  | An array of AWS service strings from the following: <br />AutoScaling \| CloudConformity \| CloudFormation \| CloudFront \| CloudTrail \| CloudWatch \|<br />CloudWatchEvents \| CloudWatchLogs \| Config \| DynamoDB \| EBS \| EC2 \| ElastiCache \|<br />Elasticsearch \| ELB \| IAM \| KMS \| RDS \| Redshift \| ResourceGroup \| Route53 \| S3 \| SES \| SNS \| SQS \| VPC \| WAF \| ACM \| Inspector \| TrustedAdvisor \| Shield \| EMR \| Lambda \| Support \| Organizations \| Kinesis \| EFS<br /><br />For more information about services, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services) |
 | `filter.categories`  | An array of category (AWS well-architected framework category) strings from the following:<br /> security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence <br />|
 | `filter.riskLevels`  | An array of risk-level strings from the following: <br /> LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME |
-| `filter.statuses`  | An array of statuses strings from the following: SUCCESS \| FAILURE |
+| `filter.statuses`  | *(only used for SNS channels)* An array of statuses strings from the following: SUCCESS \| FAILURE |
 | `filter.tags`  | An array of any assigned metadata tags to your AWS resources |
 
 
@@ -417,7 +556,7 @@ The table below give more information about configuration options:
 | ------------- | ------------- |
 | email  | `configuration.key` is "users", `configuration.value` is an array of verified users that have at least readOnly access to the account|
 | sms  | `configuration.key` is "users", `configuration.value` is an array of users with verified mobile numbers that have at least readOnly access to the account|
-| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook", "channel": "#your-channel" }`  |
+| slack  | `{ "url": "https://hooks.slack.com/services/your-slack-webhook",` <br>`"channel": "#your-channel",` <br>`"displayIntroducedBy": false,` Boolean, true for adding user to message<br>`"displayResource": false,` Boolean, true for adding resource to message<br>`"displayTags": false}` Boolean, true for adding associated tags to message   |
 | pager-duty  |   `{ "serviceName": "yourServiceName", "serviceKey": "yourServiceKey" }` |
 | sns  |  `{ "arn": "arn:aws:sns:REGION:ACCOUNT_ID:TOPIC_NAME"}`  |
 
@@ -432,34 +571,14 @@ curl -X PATCH \
 {
     "data": {
         "type": "settings",
-        "id": "H19NxM15-:communication:pager-duty-S1xvk1zGwM",
         "attributes": {
             "type": "communication",
             "enabled": true,
-            "filter": {
-                "statuses": [
-                    "FAILURE"
-                ]
-            },
             "configuration": {
                 "serviceName": "SomeOtherName",
                 "serviceKey": "anotherpagerdutyservicekey"
             },
             "channel": "pager-duty"
-        },
-        "relationships": {
-            "organisation": {
-                "data": {
-                    "type": "organisations",
-                    "id": "ryqMcJn4b"
-                }
-            },
-            "account": {
-                "data": {
-                    "type": "accounts",
-                    "id": "H19NxM15-"
-                }
-            }
         }
     }
 }' \
@@ -477,11 +596,6 @@ Example Response:
                 "type": "communication",
                 "manual": "",
                 "enabled": true,
-                "filter": {
-                    "statuses": [
-                        "FAILURE"
-                    ]
-                },
                 "configuration": {
                     "serviceName": "SomeOtherName",
                     "serviceKey": "anotherpagerdutyservicekey"

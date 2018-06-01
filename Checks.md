@@ -3,7 +3,9 @@
 Below is a list of the available APIs:
 
 - [Create Custom Checks](#create-custom-checks)
+- [Update Check](#update-check)
 - [List All Checks](#list-all-checks)
+- [Get Check Details](#get-check-details)
 - [Delete Check](#delete-check)
 
 
@@ -32,6 +34,7 @@ This endpoint is used to create a custom checks. You may pass one check or an ar
     - `message`: String, descriptive message about the check
     - `region`: String, a valid AWS region. Please refer to [Cloud Conformity Region Endpoint](https://us-west-2.cloudconformity.com/v1/regions)
     - `resource`: String, the AWS resource this check applies to. (optional)
+    - `rule-title`: String, custom rule title. (optional, defaults to "Custom Rule" if not specified)
     - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
     - `status`: String, SUCCESS or FAILURE
     - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
@@ -179,11 +182,13 @@ Example Response:
                 "status": "FAILURE",
                 "risk-level": "VERY_HIGH",
                 "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
                 "message": "Descriptive message about this check",
                 "resource": "sg-956d00ea",
                 "last-modified-date": 1521660152755,
                 "created-date": 1521660152755,
                 "failure-discovery-date": 1521660152755,
+                "categories": ["security"],
                 "extradata": [
                     {
                         "label": "This will show up on the UI",
@@ -223,11 +228,13 @@ Example Response:
                 "status": "FAILURE",
                 "risk-level": "VERY_HIGH",
                 "pretty-risk-level": "Very High",
+                "rule-title": "Custom Rule",
                 "message": "Security group default allows ingress from 0.0.0.0/0 to port 53",
                 "resource": "sg-2e885d48",
                 "last-modified-date": 1521660152755,
                 "created-date": 1521660152755,
                 "failure-discovery-date": 1521660152755,
+                "categories": ["security"],
                 "extradata": [
                     {
                         "label": "Attachments",
@@ -280,6 +287,242 @@ Example Response:
 }
 ```
 
+
+## Update check
+This endpoint is used to either update one custom check OR suppress/unsuppress one normal check.
+
+
+**IMPORTANT:**
+&nbsp;&nbsp;&nbsp;Some guidelines about using this endpoint:
+1. When updating an custom check, you must leave `region`, `resource`, `service` attributes and `relationship.account` and `relationship.rule` unchanged. These are unique identifier parameters for custom checks and must be always present and unchanged once check is created.
+2. Suppression of check via this endpoint only works with FAILING checks and not successful checks.
+
+##### Endpoints:
+
+`PATCH /checks/id`
+
+##### Parameters
+
+*The following parameters are for updating a custom check only* 
+- `data`: a data object containing JSONAPI compliant object with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+    - `message`: String, descriptive message about the check
+    - `region`: String, leave UNCHANGED
+    - `resource`: String, leave UNCHANGED (optional)
+    - `rule-title`: String, custom rule title. (optional, defaults to "Custom Rule" if not specified)
+    - `risk-level`: String, one risk level from the following: LOW\| MEDIUM \| HIGH \| VERY_HIGH \| EXTREME
+    - `status`: String, SUCCESS or FAILURE
+    - `categories`: An array of category (AWS well-architected framework category) strings from the following: security \| cost-optimisation \| reliability \| performance-efficiency  \| operational-excellence (optional)
+    - `service`: String, leave UNCHANGED
+    - `not-scored`: Boolean, true for informational checks (optional)
+    - `tags`: Array, an array of tag strings that follow the format: "key::value". You can enter a max of 20 tags, each tag must not exceed 50 characters. (optional)
+    - `extradata`: An array of objects (optional), each object must contain
+      - `label`: String, as it will appear on the client UI. Character limit of 20
+      - `name`: String, as reference for the back-end. Character limit of 20
+      - `type`: String, provide type as you see fit. Character limit of 20
+      - `value`: Enter value as you see fit. If entering a number or string, length must not exceed 150.
+  - `relationships`: A relationships object containing
+    - `account`: An account object containing
+      - `data`: A data object containing
+        - `id`: String, leave UNCHANGED
+        - `type`: "accounts"
+    - `rule`: An rule object containing
+      - `data`: A data object containing
+        - `id`: String, leave UNCHANGED
+        - `type`: "rules"
+
+
+*The following parameters are for normal checks only*
+- `data`: a data object containing JSONAPI compliant object with following properties
+  - `type`: "checks"
+  - `attributes`: An attributes object containing
+    - `suppressed`: Boolean, true for suppressing the check
+    - `suppressed-until` Number, milliseconds between midnight of January 1, 1970 and the time when you want to suppress the check until. *Null if suppressing indefinitely*
+- `meta`: a data object containing
+  - `note`: String, a message regarding the reason for this check suppression update.
+
+
+Example request for updating a custom check:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": {
+        "type": "checks",
+        "attributes": {
+            "region": "us-west-2",
+            "resource": "sg-956d00ea",
+            "risk-level": "VERY_HIGH",
+            "status": "FAILURE",
+            "service": "EC2",
+            "categories": ["security"],
+            "rule-title": "Custom Rule about EC2 SGs",
+            "message": "Updated message about this check",
+            "extradata": [
+                {
+                    "label": "This will show up on the UI",
+                    "name": "nameForReference",
+                    "type": "META",
+                    "value": "string or number or boolean"
+                },
+                {
+                    "label": "It is good to be descriptive",
+                    "name": "forReference",
+                    "type": "META",
+                    "value": "hello world!"
+                }
+            ],
+            "tags": ["key0::value0", "key1::value1"]
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "CUSTOM-001"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
+                }
+            }
+        }
+    }
+}' \
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea
+```
+Example Response:
+
+```
+{
+    "data": {
+        "type": "checks",
+        "id": "ccc:H19NxM15-:CUSTOM-001:EC2:us-west-2:sg-956d00ea",
+        "attributes": {
+            "region": "us-west-2",
+            "status": "FAILURE",
+            "service": "EC2",
+            "risk-level": "VERY_HIGH",
+            "pretty-risk-level": "Very High",
+            "rule-title": "Custom Rule about EC2 SGs",
+            "message": "Updated message about this check",
+            "resource": "sg-956d00ea",
+            "categories": ["security"],
+            "last-modified-date": 1526566995282,
+            "created-date": 1521660152755,
+            "failure-discovery-date": 1521660152755,
+            "extradata": [
+                {
+                    "label": "This will show up on the UI",
+                    "name": "nameForReference",
+                    "type": "META",
+                    "value": "string or number or boolean"
+                },
+                {
+                    "label": "It is good to be descriptive",
+                    "name": "forReference",
+                    "type": "META",
+                    "value": "hello world!"
+                }
+            ],
+            "tags": ["key0::value0", "key1::value1"]
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "CUSTOM-001"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "H19NxM15-"
+                }
+            }
+        }
+    }
+}
+```
+
+
+Example request for suppressing a check:
+
+```
+curl -X PATCH \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+-d '
+{
+    "data": {
+        "type": "checks",
+        "attributes": {
+            "suppressed": true,
+            "suppressed-until": 1526574705655
+        }
+    },
+    "meta": {
+        "note": "suppressed for 1 week, failure not-applicable during project xyz"
+
+    }
+}; \
+
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:H19NxM15:EC2-013:EC2:ap-southeast-2:
+```
+Example Response:
+
+```
+{
+    "data": {
+        "type": "checks",
+        "id": "ccc:H19NxM15:Config-001:Config:us-west-2:",
+        "attributes": {
+            "region": "us-west-2",
+            "status": "FAILURE",
+            "risk-level": "HIGH",
+            "pretty-risk-level": "High",
+            "message": "AWS Config is not enabled for us-west-2 region ",
+            "last-modified-date": 1526571108174,
+            "created-date": 1513472920569,
+            "categories": [
+                "security"
+            ],
+            "suppressed": true,
+            "last-updated-date": null,
+            "failure-discovery-date": 1526571108174,
+            "failure-introduced-by": null,
+            "resolved-by": null,
+            "last-updated-by": null,
+            "extradata": null,
+            "tags": [],
+            "cost": 0,
+            "waste": 0,
+            "suppressed-until": 1526574705655,
+            "not-scored": false,
+            "rule-title": "AWS Config Enabled"
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "Config-001"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "HJtqfslfG"
+                }
+            }
+        }
+    }
+}
+```
 
 
 ## List All Checks
@@ -387,6 +630,73 @@ Example Response:
     ],
     "meta": {
         "total-pages": 714
+    }
+}
+```
+
+
+
+## Get Check Details
+
+This endpoint allows you to get the details of the specified check.
+
+##### Endpoints:
+
+`GET /checks/id`
+
+##### Parameters
+- `id`: The Cloud Conformity ID of the check
+
+
+Example Request:
+
+```
+curl -H "Content-Type: application/vnd.api+json" \
+-H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
+https://us-west-2-api.cloudconformity.com/v1/checks/checks/ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test
+```
+Example Response:
+```
+{
+    "data": {
+        "type": "checks",
+        "id": "ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test",
+        "attributes": {
+            "region": "global",
+            "status": "FAILURE",
+            "risk-level": "LOW",
+            "pretty-risk-level": "High",
+            "message": "IAM Group test contains no user",
+            "last-modified-date": 1500166639466,
+            "created-date": 1500166639466
+            "last-updated-date": 1500166639466,
+            "failure-discovery-date": 1498910777689,
+            "last-updated-by": "SYSTEM",
+            "resolved-date": 1518409298274,
+            "resolved-by": null,
+            "ccrn": "ccrn:aws:r1gyR4cqg:IAM:global:groups-test",
+            "extradata": null,
+            "tags": [],
+            "cost": 0,
+            "waste": 0,
+            "not-scored": false,
+            "ignored": null,
+            "rule-title": "Password Policy Present"
+        },
+        "relationships": {
+            "rule": {
+                "data": {
+                    "type": "rules",
+                    "id": "IAM-017"
+                }
+            },
+            "account": {
+                "data": {
+                    "type": "accounts",
+                    "id": "r1gyR4cqg"
+                }
+            }
+        }
     }
 }
 ```
