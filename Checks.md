@@ -653,7 +653,7 @@ Example Request:
 ```
 curl -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: ApiKey S1YnrbQuWagQS0MvbSchNHDO73XHqdAqH52RxEPGAggOYiXTxrwPfmiTNqQkTq3p" \
-https://us-west-2-api.cloudconformity.com/v1/checks/checks/ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test
+https://us-west-2-api.cloudconformity.com/v1/checks/ccc:r2gyR4cqg:IAM-017:IAM:global:groups-test
 ```
 Example Response:
 ```
