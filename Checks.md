@@ -539,6 +539,8 @@ This endpoint allows you to collect checks for a specified account.
 - `page[number]`: Indicates the page number, defaults to 0
 - `filter`: Optional parameter including services, regions, categories, statuses, ruleIds, riskLevel, suppressed, and tags.
 
+###### There is a 10k limit to the maximum number of overall results that can be returned. Paging will not work for higher than this limit. To fetch larger numbers, segment your requests using account and region filtering. On larger accounts, filter requests per account, per region, per service.
+
 
 ##### Filtering
 The `filter` query parameter is reserved to be used as the basis for filtering.
@@ -576,6 +578,7 @@ The table below give more information about filter options:
 | filter[tags]  | Any assigned metadata tags to your AWS resources |
 
 <br />
+
 
 
 Example Request:
@@ -633,7 +636,6 @@ Example Response:
     }
 }
 ```
-
 
 
 ## Get Check Details
