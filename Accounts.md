@@ -800,14 +800,21 @@ Rule `ruleId` is not configurable | remove `ruleSetting.extraSettings`, you may 
 
 A GET request to this endpoint allows you to get rule settings for all configured rules of the specified account.
 If a rule has never been configured, it will not show up in the resulting data.
-For example, even if our bots run rule RDS-018 for your account hourly, if you have never configured it, it will not be part of the data body we send back.
+For example, even if our bots run rule RDS-018 for your account hourly, if you have never configured it, it will not be 
+part of the data body we send back.
+
+This endpoint only returns configured rules. If you want to include default rule settings, set `includeDefaults=true` in
+query parameters.
+
+Details of rule setting types used by Cloud Conformity are available [here](./RuleSettings.md) 
 
 ##### Endpoints:
 
-`GET /accounts/accountId/settings/rules`
+`GET /accounts/accountId/settings/rules[?includeDefaults=true/false]`
 
 ##### Parameters
 - `accountId`: The Cloud Conformity ID of the account
+- `includeDefaults`: Optional, Whether or not to include default rule settings. Defaults to false.
 
 
 
