@@ -81,6 +81,8 @@ There are two parameters to configure pagination:
 Below is a list of the available APIs: 
 
 - [Accounts](./Accounts.md)
+- [Rule Settings](./Accounts.md#get-rule-settings)
+- [Rule Setting types](./RuleSettings.md#extra-setting-types)
 - [API Keys](./APIKeys.md)
 - [Checks](./Checks.md)
 - [Events](./Events.md)
