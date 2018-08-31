@@ -68,7 +68,13 @@ loadExternalId().then(function (externalId) {
 
 		console.log("Creating CloudConformity stack...");
 
-		let CloudFormation = Promise.promisifyAll(new AWS.CloudFormation(config));
+		let CloudFormation = Promise.promisifyAll(new AWS.CloudFormation(config), {
+			filter: function(name, func, target, passesDefaultFilter) {
+				return passesDefaultFilter &&
+					name !== "onAsync" &&
+					name !== "on";
+			}
+		});
 		return CloudFormation.createStackAsync(params).then(function (result) {
 
 			let waitCompletion = function () {

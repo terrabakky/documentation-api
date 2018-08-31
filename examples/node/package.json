@@ -9,9 +9,9 @@
   "author": "Mike Rahmati",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.126.0",
-    "bluebird": "^3.5.0",
-    "request": "^2.83.0",
+    "aws-sdk": "^2.306.0",
+    "bluebird": "^3.5.1",
+    "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }
 }

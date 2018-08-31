@@ -62,7 +62,13 @@ Promise.mapSeries(accounts, function(account) {
 
 		console.log("Got an external id %s, crating CloudConformity stack", externalId);
 
-		var CloudFormation = Promise.promisifyAll(new AWS.CloudFormation(config));
+		var CloudFormation = Promise.promisifyAll(new AWS.CloudFormation(config), {
+			filter: function(name, func, target, passesDefaultFilter) {
+				return passesDefaultFilter &&
+					name !== "onAsync" &&
+					name !== "on";
+			}
+		});
 
 		console.log("Creating stack");
 
