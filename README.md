@@ -93,3 +93,7 @@ Below is a list of the available APIs:
 ## Support
 
 If you have questions or issues using the Cloud Conformity API, please contact us at support@cloudconformity.com
+
+## About
+
+Protect, Detect, Correct. The most complete solution to avoid critical threats and vulnerabilities in your AWS environments. Awarded both AWS Cloud Management Tools Competency and Security Partner Competency, Cloud Conformity’s security and optimization platform delivers continuous assurance that your infrastructure is risk-free and compliant as your cloud presence grows.
