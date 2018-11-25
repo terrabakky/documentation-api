@@ -90,6 +90,7 @@ Below is a list of the available APIs:
 - [Settings](./Settings.md)
 - [Users](./Users.md)
 - [Report Configs](./ReportConfigs.md)
+- [IaC Scanning](./IaCScanning.md)
 
 ## Support
 
