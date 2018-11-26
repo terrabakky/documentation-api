@@ -83,10 +83,12 @@ _Example:_
   - Table
 - EC2
   - Instance
+  - NatGateway
   - NetworkAcl
   - RouteTable
   - SecurityGroup
   - Subnet
+  - VPCEndpoint
 - EFS
   - FileSystem
 - ELB
@@ -112,6 +114,8 @@ _Example:_
   - Topic
 - WorkSpaces
   - WorkSpace
+
+
 
 #### Supported rules:
 All resource level rules are supported.
