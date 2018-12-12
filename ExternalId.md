@@ -8,7 +8,7 @@ Below is a list of the available APIs:
 
 ## Get Organisation External ID
 
-This endpoint allows you to get your organisation's external ID.
+This endpoint allows you to get your organisation's external ID. Note: The endpoint will return an error if no accounts have previously been added to the organisation.
 
 ##### Endpoints: 
 
