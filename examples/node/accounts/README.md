@@ -1,4 +1,4 @@
-# Adding multiple account using the API example
+# Interacting with Accounts and rule settings
 
 This examples illustrate the way one can add multiple accounts to Cloud Conformity
 
