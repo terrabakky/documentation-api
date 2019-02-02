@@ -457,7 +457,7 @@ Example Response:
             "environment": "myAWSenv",
             "awsaccount-id": "123456789101",
             "status": "ACTIVE",
-            "hasRealTimeMonitoring": true,
+            "has-real-time-monitoring": true,
             "cost-package": true,
             "last-notified-date": 1504113512701,
             "last-checked-date": 1504113511956,
