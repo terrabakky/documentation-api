@@ -8,17 +8,17 @@ const CloudConformityRoleName = "CloudConformity";
 
 const accounts = [
 	{
-		AWSAccountId: "961944027523",
+		AWSAccountId: "123456789012",
 		environment: "Production",
 		name: "First account"
 	},
 	{
-		AWSAccountId: "961944027523",
+		AWSAccountId: "123456789012",
 		environment: "Development",
 		name: "Second Account"
 	},
 	{
-		AWSAccountId: "961944027523",
+		AWSAccountId: "123456789012",
 		environment: "Test",
 		name: "Third account"
 	}
