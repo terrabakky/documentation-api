@@ -1,14 +1,17 @@
-import requests
+#!/usr/bin/env python3
+
 import json
+import requests
 
 
-#Please substitute YOUR_ENDPOINT and YOUR_API_KEY
-endpoint = 'YOUR_ENDPOINT'
+# Please substitute YOUR_ENDPOINT and YOUR_API_KEY
+ENDPOINT = 'YOUR_ENDPOINT'
+API_KEY = 'YOUR_API_KEY'
 headers = {
 	'Content-Type': 'application/vnd.api+json',
-	'Authorization': 'ApiKey YOUR_API_KEY'
+	'Authorization': 'ApiKey {API_KEY}'.format(API_KEY=API_KEY)
 }
 
-resp = requests.get(endpoint, headers=headers)
+resp = requests.get(ENDPOINT, headers=headers)
 
-print json.dumps(resp.json(), indent=4, sort_keys=True)
+print(json.dumps(resp.json(), indent=4, sort_keys=True))
